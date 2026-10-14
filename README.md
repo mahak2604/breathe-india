@@ -98,4 +98,4 @@ powerbi/               Breathe_India.pbix + PDF, PBIP project, data CSVs/workboo
 - [x] Power BI `.pbix` + PDF export (`powerbi/`)
 - [x] Written report, 6 pages (`docs/report/Breathe_India_report.docx` + `.pdf`)
 - [x] Presentation deck, 10 slides with speaker notes (`docs/presentation/Breathe_India_viva.pptx` + `.pdf`)
-- [x] Individual contribution statement (report §8; confirm the split before submitting)
+- [x] Individual contribution statement (report §8 and `docs/contribution_statement.txt`)

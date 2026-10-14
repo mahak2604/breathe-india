@@ -36,7 +36,7 @@ The whole pipeline runs end to end in one notebook in about 8 minutes, and every
 
 ### 3.1 Extraction
 
-- **CPCB data:** Kaggle's public dataset endpoint, which needs no login (the browser button does). Only the three daily files are kept; the 286 MB of hourly files are not needed.
+- **CPCB data:** Kaggle's public dataset endpoint, which needs no login (the browser button does). Only the three daily files are kept; the 285 MB of hourly files are not needed.
 - **Weather:** a 5-year, 8-variable request counts as many API calls, so we hit HTTP 429 (rate limited) after 7 cities. The extractor now pauses 15 s between cities, waits 65 s after a 429 and caches each city's raw JSON, so a rerun fetches only what is missing.
 - **Locations:** every geocoder match is checked against the city's state. The geocoder's "Jorapokhar" was a village about 160 km from the monitoring station, so Jharia (Dhanbad), where the station stands, is used instead.
 
@@ -47,7 +47,7 @@ The whole pipeline runs end to end in one notebook in about 8 minutes, and every
 | Ahmedabad CO equals NO (r = 0.999) | CO set to missing; AQI recalculated without it | CO drove 95% of its official "Severe" days | 1,400 CO; 1,576 AQI |
 | PM2.5 above PM10, which is physically impossible | Removed whichever reading was further from the city-month norm | Data showed PM2.5 was the faulty one in 94% of cases, overturning our first assumption | 256 |
 | Sensor stuck on one value 4+ days | Set to missing | Daily averages never repeat to two decimals for days | 30 |
-| Spikes > 3.5 robust SD above the city-month norm | Set to missing, except during Diwali and the crop-burning season | 55% fell in the monsoon, including 917 µg/m³ in Shillong, the cleanest city | 167 removed, 5 kept |
+| Spikes > 3.5 robust SD above the city-month norm | Set to missing, except during Diwali and the crop-burning season | 55% fell in the monsoon, including 918 µg/m³ in Shillong, the cleanest city | 167 removed, 5 kept |
 | Exact 0.00 for CO and NOx | Set to missing | A city-wide daily mean of zero is impossible | 3,068 |
 | Gaps of 1–3 days | Linear interpolation within the city | Pollution changes smoothly over a few days; longer gaps stay missing | 3,700 |
 | Official AQI above 500 | Capped at 500 | 500 is the top of the CPCB scale | 543 |
@@ -55,7 +55,7 @@ The whole pipeline runs end to end in one notebook in about 8 minutes, and every
 
 ### 3.3 Transformation
 
-- **Star schema:** a city-day fact table (28,260 rows × 62 columns) with city, date and station dimensions. Every join declares its cardinality, so a duplicated key stops the notebook instead of silently multiplying rows.
+- **Star schema:** a city-day fact table (28,260 rows × 61 columns) with city, date and station dimensions. Every join declares its cardinality, so a duplicated key stops the notebook instead of silently multiplying rows.
 - **Engineered features:** day-night temperature range, wind as a vector (so 359° sits next to 1°), seasonal sine and cosine, Diwali and crop-burning flags, lockdown phase, and PM2.5 relative to the same city's median for that month.
 - **Time features:** yesterday's and the day before's values joined by calendar date (safe across gaps, unlike a row shift), plus a 7-day rolling mean.
 - **Reshapes:** a melt to 165,506 city-day-pollutant rows for the dashboard, a city × month pivot for the seasonal heatmap, region × season and station-level aggregations.
@@ -84,7 +84,7 @@ Three tasks, each judged against a simple baseline on data the model never saw, 
 | Random Forest | 0.76 | 0.70 | 90% | 33% |
 | **Gradient Boosting (chosen)** | **0.75** | **0.72** | **92%** | **35%** |
 
-Gradient Boosting has the best macro F1, which weights all six categories equally, and 99.7% of its errors are one category away. Its value is on days the air changes, which the baseline gets wrong by definition. It also fails honestly: in cross-validation on 2015–18 it only matched the baseline (macro F1 0.62 each), and during the lockdown its macro F1 fell to 0.59, below the baseline's 0.65, because the rules it learned stopped applying.
+Gradient Boosting has the best macro F1, which weights all six categories equally, and 99.7% of its predictions are right or one category off. Its value is on days the air changes, which the baseline gets wrong by definition. It also fails honestly: in cross-validation on 2015–18 it only matched the baseline (macro F1 0.62 each), and during the lockdown its macro F1 fell to 0.59, below the baseline's 0.65, because the rules it learned stopped applying.
 
 ### 4.2 Model B: what the lockdown really changed (regression as a counterfactual)
 
@@ -93,7 +93,7 @@ The model predicts PM2.5 and NO₂ from weather, season, day of week, long-term 
 | Check | Result |
 | --- | --- |
 | Placebo: predict spring 2019, when nothing happened | Random Forest R² 0.55, bias −2%; city-month average R² 0.44; Ridge 0.38 |
-| Out-of-sample, 1 Jan to 24 Mar 2020 | R² 0.64, bias +4%: it tracked reality up to the lockdown |
+| Out-of-sample, 1 Jan to 24 Mar 2020 | R² 0.67, bias +4%: it tracked reality up to the lockdown |
 | 80% prediction band (quantile Gradient Boosting) | Covered 73% of days: slightly too narrow, read as indicative |
 | Lockdown effect on PM2.5, median of 17 cities | −41% naive vs **−28% weather-adjusted** |
 | Lockdown effect on NO₂, median of 17 cities | −47% naive vs **−46% weather-adjusted** |
@@ -155,8 +155,8 @@ The conclusions hold for the monitored parts of 26 cities from 2015 to mid-2020;
 
 | Member | Primary responsibility |
 | --- | --- |
-| Mahak Wadhawan (L074) | Data extraction (Kaggle download, Open-Meteo APIs), cleaning and the cleaning log, SQLite and Parquet loading, data-quality page |
-| Yash Shah (L056) | Transformation and feature engineering, the three machine-learning models, Power BI dashboard |
+| Mahak Wadhawan (L074) | Transformation and feature engineering, the three machine-learning models, the Power BI dashboard |
+| Yash Shah (L056) | Data extraction (Kaggle download, Open-Meteo APIs), cleaning and the cleaning log, SQLite and Parquet storage |
 | Both | Insights, this report and the presentation |
 
 ## References

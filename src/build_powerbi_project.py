@@ -706,7 +706,7 @@ def page_forecast():
 def page_quality():
     vs = [navigator("dq_nav"),
           kpi_cards("dq_kpis", (24, 88, 600, 96), [
-              ("Cleaning Steps", "Cleaning decisions logged"), ("Sensor Faults Removed", "Sensor faults removed"),
+              ("Cleaning Steps", "Cleaning decisions logged"), ("Sensor Faults Removed", "Days with bad PM data"),
               ("AQI Values Rebuilt", "AQI values rebuilt")]),
           textbox("dq_headline", (636, 88, 620, 96), [
               [("Ahmedabad: #1 most polluted → #7 after cleaning", {"fontFamily": "Segoe UI Semibold",

@@ -1,0 +1,8 @@
+Individual contribution statement
+Breathe India: what really drives air pollution in Indian cities? (Data Wrangling Group Project)
+
+Mahak Wadhawan (L074): Data transformation and feature engineering, the three machine-learning models (next-day AQI classifier, weather-normalised lockdown counterfactual, city clustering), and the Power BI dashboard.
+
+Yash Shah (L056): Data extraction (Kaggle download, Open-Meteo weather and geocoding APIs), data cleaning and the cleaning log, and loading to SQLite and Parquet storage.
+
+Both: Insights, the written report and the presentation.

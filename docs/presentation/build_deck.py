@@ -202,7 +202,7 @@ notes(s, "Our three headline answers. First, pollution did fall in the 2020 lock
 s = prs.slides.add_slide(BLANK)
 title(s, "Four sources, one star schema, three storage formats", "Data and pipeline")
 sources = [("CPCB air quality", "Kaggle download · 29,531 city-days, 108,035 station-days"),
-           ("Open-Meteo weather API", "52,234 days of ERA5 weather · rate-limited, cached"),
+           ("Open-Meteo weather API", "52,234 city-days of ERA5 weather · rate-limited, cached"),
            ("Open-Meteo geocoding API", "26 cities located · names checked by state"),
            ("Event calendar", "Lockdown phases and Diwali dates")]
 for i, (name, sub) in enumerate(sources):
@@ -215,7 +215,7 @@ for i, (name, sub) in enumerate(sources):
     arrow.line.width = Pt(1.25)
 mid = card(s, 5.6, 2.9, 3.0, 2.4, fill=NAVY)
 text(s, 5.85, 3.15, 2.5, 0.4, "Clean fact table", size=18, bold=True, color=WHITE)
-text(s, 5.85, 3.6, 2.6, 1.6, ["28,260 city-days × 62 columns", "23 logged cleaning decisions",
+text(s, 5.85, 3.6, 2.6, 1.6, ["28,260 city-days × 61 columns", "23 logged cleaning decisions",
                               "Validated joins, lags, rolling means"], size=13, color=WHITE, space_after=4)
 outs = [("SQLite", "keys + read-back checks"), ("Parquet", "partitioned by year"),
         ("Power BI", "5-page dashboard"), ("Models A, B, C", "scikit-learn")]
@@ -243,7 +243,7 @@ issues = [("1", "A copied column", "Ahmedabad's CO equals its NO on 94% of days,
                                    "1000×. It drove 95% of the city's “Severe” days."),
           ("2", "Impossible pairs", "PM2.5 above PM10 on 256 days. We assumed PM10 was wrong; the data showed "
                                     "PM2.5 was the faulty one 94% of the time."),
-          ("3", "Broken sensors", "A sensor stuck at 11.00 for 8 days, and 917 µg/m³ in Shillong, the cleanest "
+          ("3", "Broken sensors", "A sensor stuck at 11.00 for 16 days, and 918 µg/m³ in Shillong, the cleanest "
                                   "city. 197 readings removed, with Diwali spikes kept."),
           ("4", "Gaps and limits", "AQI up to 2,049 on a 0–500 scale, exact zeros, 61% of one column empty. "
                                    "Short gaps interpolated, the rest left honest.")]
@@ -258,7 +258,7 @@ notes(s, "These are the four ways the raw data misled us. One: Ahmedabad's carbo
          "its nitric oxide column, identical on 94 percent of days. Two: on 256 days fine particles exceeded "
          "coarse particles, which is physically impossible. We first assumed the PM10 sensor was wrong; the "
          "data told us it was PM2.5, so we changed our rule. Three: broken sensors, including Shillong "
-         "'reading' 917. Four: impossible AQI values and big gaps. Every decision, 23 in all, is in our "
+         "'reading' 918. Four: impossible AQI values and big gaps. Every decision, 23 in all, is in our "
          "cleaning log with its reason.")
 
 # ----------------------------------------------------------------------------- 5 insight: ranking error
@@ -414,8 +414,8 @@ text(s, 7.0, 2.4, 5.7, 3.0, ["Season sets the baseline: winter is the problem in
                              "Wrangling changed the answer: check the data before trusting a ranking"],
      size=15, color=WHITE, space_after=9)
 text(s, 7.0, 4.9, 5.7, 1.1, [[("Contribution: ", {"bold": True, "color": PALE}),
-                              ("Mahak led extraction, cleaning and storage; Yash led transformation, the models and "
-                               "the dashboard; insights, report and deck together.", {})]], size=13, color=WHITE)
+                              ("Mahak led transformation, the models and the dashboard; Yash led extraction, cleaning "
+                               "and storage; insights, report and deck together.", {})]], size=13, color=WHITE)
 text(s, 0.6, 6.2, 12, 0.6, "Thank you. Questions?", size=26, bold=True, color=WHITE)
 footer(s, 10, dark=True)
 notes(s, "To close: our data covers monitored parts of 26 cities and ends in mid-2020, and our corrections are "

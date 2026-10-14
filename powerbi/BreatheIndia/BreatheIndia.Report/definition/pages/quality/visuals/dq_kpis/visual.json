@@ -43,7 +43,7 @@
               },
               "queryRef": "_Measures.Sensor Faults Removed",
               "nativeQueryRef": "Sensor Faults Removed",
-              "displayName": "Sensor faults removed"
+              "displayName": "Days with bad PM data"
             },
             {
               "field": {
