@@ -1,0 +1,12 @@
+pollutant,missing_raw_pct,missing_clean_pct
+PM2.5,15.6,11.3
+PM10,37.7,34.0
+NO,12.1,7.1
+NO2,12.1,7.1
+NOx,14.2,12.1
+NH3,35.0,31.2
+CO,7.0,14.6
+SO2,13.1,7.9
+O3,13.6,8.5
+Benzene,19.0,14.2
+Toluene,27.2,22.7

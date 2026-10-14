@@ -1,0 +1,27 @@
+City,matched_name,State,latitude,longitude,elevation_m,population,geo_note
+Ahmedabad,Ahmedabad,Gujarat,23.02579,72.58727,56.0,6357693.0,
+Aizawl,Aizawl,Mizoram,23.72894,92.71791,1080.0,293416.0,
+Amaravati,Amaravati,Andhra Pradesh,16.514,80.516,22.0,103000.0,same name exists in KA and TN
+Amritsar,Amritsar,Punjab,31.62234,74.87534,244.0,1159227.0,
+Bengaluru,Bengaluru,Karnataka,12.97194,77.59369,920.0,8495492.0,
+Bhopal,Bhopal,Madhya Pradesh,23.25469,77.40289,523.0,1798218.0,
+Brajrajnagar,Brajarajnagar,Odisha,21.81667,83.91667,219.0,80403.0,GeoNames spells it 'Brajarajnagar'
+Chandigarh,Chandigarh,Chandigarh,30.73629,76.7884,351.0,970602.0,
+Chennai,Chennai,Tamil Nadu,13.08784,80.27847,14.0,4681087.0,
+Coimbatore,Coimbatore,Tamil Nadu,11.00555,76.96612,411.0,2136916.0,
+Delhi,Delhi,National Capital Territory of Delhi,28.65195,77.23149,227.0,11034555.0,other 'Delhi' villages exist in MP
+Ernakulam,Ernākulam,Kerala,9.96714,76.29036,11.0,,
+Gurugram,Gurugram,Haryana,28.4601,77.02635,228.0,886519.0,
+Guwahati,Guwahati,Assam,26.1844,91.7458,59.0,962334.0,
+Hyderabad,Hyderabad,Telangana,17.38405,78.45636,515.0,6993262.0,
+Jaipur,Jaipur,Rajasthan,26.91962,75.78781,435.0,3046163.0,
+Jorapokhar,Jharia,Jharkhand,23.74079,86.41456,204.0,86938.0,"the API's 'Jorapokhar' is a different village ~200 km away; the CPCB station is at Jorapokhar, Jharia (Dhanbad), so Jharia is used"
+Kochi,Kochi,Kerala,9.93988,76.26022,9.0,633553.0,
+Kolkata,Kolkata,West Bengal,22.56263,88.36304,11.0,4631392.0,
+Lucknow,Lucknow,Uttar Pradesh,26.83928,80.92313,126.0,2472011.0,
+Mumbai,Mumbai,Maharashtra,19.07283,72.88261,8.0,12691836.0,
+Patna,Patna,Bihar,25.59408,85.13563,53.0,1684297.0,
+Shillong,Shillong,Meghalaya,25.56892,91.88313,1507.0,143229.0,
+Talcher,Tālcher,Odisha,20.94927,85.23354,80.0,40841.0,
+Thiruvananthapuram,Thiruvananthapuram,Kerala,8.4855,76.94924,18.0,788271.0,
+Visakhapatnam,Visakhapatnam,Andhra Pradesh,17.68009,83.20161,24.0,1063178.0,

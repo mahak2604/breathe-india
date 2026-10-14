@@ -1,0 +1,7 @@
+category,rank,aqi_from,aqi_to,color,health_message
+Good,1,0,50,#eea07c,Minimal impact
+Satisfactory,2,51,100,#e27b52,Minor breathing discomfort for sensitive people
+Moderate,3,101,200,#cf5a31,"Discomfort for people with lung or heart disease, children and older adults"
+Poor,4,201,300,#ad3f1d,Breathing discomfort for most people on prolonged exposure
+Very Poor,5,301,400,#832a12,Respiratory illness on prolonged exposure
+Severe,6,401,500,#561a0b,Affects healthy people; serious for the ill

@@ -1,0 +1,89 @@
+evaluation,model,metric,value,task
+Test (2019 - Mar 2020),Persistence baseline,Accuracy,0.717,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Accuracy,0.685,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Accuracy,0.756,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Accuracy,0.753,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Accuracy,0.81,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Accuracy,0.707,A: next-day AQI category
+Lockdown stress test,Random Forest,Accuracy,0.79,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Accuracy,0.805,A: next-day AQI category
+Test (2019 - Mar 2020),Persistence baseline,Macro F1,0.66,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Macro F1,0.645,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Macro F1,0.699,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Macro F1,0.721,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Macro F1,0.652,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Macro F1,0.577,A: next-day AQI category
+Lockdown stress test,Random Forest,Macro F1,0.567,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Macro F1,0.587,A: next-day AQI category
+Test (2019 - Mar 2020),Persistence baseline,Weighted F1,0.717,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Weighted F1,0.695,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Weighted F1,0.754,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Weighted F1,0.756,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Weighted F1,0.811,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Weighted F1,0.71,A: next-day AQI category
+Lockdown stress test,Random Forest,Weighted F1,0.787,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Weighted F1,0.806,A: next-day AQI category
+Test (2019 - Mar 2020),Persistence baseline,Within one category,0.992,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Within one category,0.992,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Within one category,0.997,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Within one category,0.997,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Within one category,0.999,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Within one category,0.998,A: next-day AQI category
+Lockdown stress test,Random Forest,Within one category,1.0,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Within one category,0.999,A: next-day AQI category
+Test (2019 - Mar 2020),Persistence baseline,Poor-or-worse recall,0.8,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Poor-or-worse recall,0.928,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Poor-or-worse recall,0.897,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Poor-or-worse recall,0.923,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Poor-or-worse recall,0.412,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Poor-or-worse recall,0.559,A: next-day AQI category
+Lockdown stress test,Random Forest,Poor-or-worse recall,0.529,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Poor-or-worse recall,0.618,A: next-day AQI category
+Test (2019 - Mar 2020),Persistence baseline,Poor-or-worse precision,0.794,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Poor-or-worse precision,0.753,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Poor-or-worse precision,0.807,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Poor-or-worse precision,0.782,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Poor-or-worse precision,0.368,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Poor-or-worse precision,0.442,A: next-day AQI category
+Lockdown stress test,Random Forest,Poor-or-worse precision,0.621,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Poor-or-worse precision,0.538,A: next-day AQI category
+Test (2019 - Mar 2020),Persistence baseline,Accuracy on days the category changed,0.0,A: next-day AQI category
+Test (2019 - Mar 2020),Logistic Regression,Accuracy on days the category changed,0.413,A: next-day AQI category
+Test (2019 - Mar 2020),Random Forest,Accuracy on days the category changed,0.329,A: next-day AQI category
+Test (2019 - Mar 2020),Gradient Boosting,Accuracy on days the category changed,0.347,A: next-day AQI category
+Lockdown stress test,Persistence baseline,Accuracy on days the category changed,0.0,A: next-day AQI category
+Lockdown stress test,Logistic Regression,Accuracy on days the category changed,0.429,A: next-day AQI category
+Lockdown stress test,Random Forest,Accuracy on days the category changed,0.256,A: next-day AQI category
+Lockdown stress test,Gradient Boosting,Accuracy on days the category changed,0.29,A: next-day AQI category
+PM25 placebo,City-month average (baseline),RMSE,23.04,B: counterfactual (placebo 2019)
+PM25 placebo,Ridge regression,RMSE,24.22,B: counterfactual (placebo 2019)
+PM25 placebo,Random Forest,RMSE,20.59,B: counterfactual (placebo 2019)
+PM25 placebo,Gradient Boosting,RMSE,21.21,B: counterfactual (placebo 2019)
+NO2 placebo,City-month average (baseline),RMSE,18.67,B: counterfactual (placebo 2019)
+NO2 placebo,Ridge regression,RMSE,16.79,B: counterfactual (placebo 2019)
+NO2 placebo,Random Forest,RMSE,15.52,B: counterfactual (placebo 2019)
+NO2 placebo,Gradient Boosting,RMSE,15.66,B: counterfactual (placebo 2019)
+PM25 placebo,City-month average (baseline),MAE,16.89,B: counterfactual (placebo 2019)
+PM25 placebo,Ridge regression,MAE,17.47,B: counterfactual (placebo 2019)
+PM25 placebo,Random Forest,MAE,14.38,B: counterfactual (placebo 2019)
+PM25 placebo,Gradient Boosting,MAE,14.61,B: counterfactual (placebo 2019)
+NO2 placebo,City-month average (baseline),MAE,10.61,B: counterfactual (placebo 2019)
+NO2 placebo,Ridge regression,MAE,11.6,B: counterfactual (placebo 2019)
+NO2 placebo,Random Forest,MAE,8.93,B: counterfactual (placebo 2019)
+NO2 placebo,Gradient Boosting,MAE,8.9,B: counterfactual (placebo 2019)
+PM25 placebo,City-month average (baseline),R2,0.44,B: counterfactual (placebo 2019)
+PM25 placebo,Ridge regression,R2,0.38,B: counterfactual (placebo 2019)
+PM25 placebo,Random Forest,R2,0.55,B: counterfactual (placebo 2019)
+PM25 placebo,Gradient Boosting,R2,0.52,B: counterfactual (placebo 2019)
+NO2 placebo,City-month average (baseline),R2,0.22,B: counterfactual (placebo 2019)
+NO2 placebo,Ridge regression,R2,0.37,B: counterfactual (placebo 2019)
+NO2 placebo,Random Forest,R2,0.46,B: counterfactual (placebo 2019)
+NO2 placebo,Gradient Boosting,R2,0.45,B: counterfactual (placebo 2019)
+PM25 placebo,City-month average (baseline),Bias %,0.87,B: counterfactual (placebo 2019)
+PM25 placebo,Ridge regression,Bias %,2.4,B: counterfactual (placebo 2019)
+PM25 placebo,Random Forest,Bias %,-1.85,B: counterfactual (placebo 2019)
+PM25 placebo,Gradient Boosting,Bias %,-1.93,B: counterfactual (placebo 2019)
+NO2 placebo,City-month average (baseline),Bias %,-19.21,B: counterfactual (placebo 2019)
+NO2 placebo,Ridge regression,Bias %,16.62,B: counterfactual (placebo 2019)
+NO2 placebo,Random Forest,Bias %,-6.69,B: counterfactual (placebo 2019)
+NO2 placebo,Gradient Boosting,Bias %,-12.5,B: counterfactual (placebo 2019)

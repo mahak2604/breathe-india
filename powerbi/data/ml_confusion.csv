@@ -1,0 +1,37 @@
+actual,predicted,days,actual_rank,predicted_rank
+Good,Good,335,1,1
+Satisfactory,Good,282,2,1
+Moderate,Good,5,3,1
+Poor,Good,0,4,1
+Very Poor,Good,1,5,1
+Severe,Good,0,6,1
+Good,Satisfactory,118,1,2
+Satisfactory,Satisfactory,2574,2,2
+Moderate,Satisfactory,490,3,2
+Poor,Satisfactory,1,4,2
+Very Poor,Satisfactory,0,5,2
+Severe,Satisfactory,0,6,2
+Good,Moderate,1,1,3
+Satisfactory,Moderate,400,2,3
+Moderate,Moderate,2317,3,3
+Poor,Moderate,119,4,3
+Very Poor,Moderate,1,5,3
+Severe,Moderate,2,6,3
+Good,Poor,0,1,4
+Satisfactory,Poor,5,2,4
+Moderate,Poor,399,3,4
+Poor,Poor,714,4,4
+Very Poor,Poor,108,5,4
+Severe,Poor,1,6,4
+Good,Very Poor,0,1,5
+Satisfactory,Very Poor,0,2,5
+Moderate,Very Poor,8,3,5
+Poor,Very Poor,107,4,5
+Very Poor,Very Poor,392,5,5
+Severe,Very Poor,25,6,5
+Good,Severe,0,1,6
+Satisfactory,Severe,0,2,6
+Moderate,Severe,1,3,6
+Poor,Severe,2,4,6
+Very Poor,Severe,33,5,6
+Severe,Severe,96,6,6

@@ -1,0 +1,192 @@
+// =====================================================================================
+// Breathe India - DAX measures
+// Create an empty table first: Home > Enter data > name it _Measures > Load.
+// Then for each block below: select _Measures > New measure > paste > Enter.
+// Formats to set are given in the comment above each measure.
+// =====================================================================================
+
+
+// ---------- 1. Air quality (fact_city_day) ----------
+
+// Format: whole number, thousands separator
+Days Measured = COUNT ( fact_city_day[PM25] )
+
+// Format: whole number
+Cities = DISTINCTCOUNT ( fact_city_day[City] )
+
+// Format: decimal, 0 places
+Median PM2.5 = MEDIAN ( fact_city_day[PM25] )
+
+// Format: decimal, 0 places
+Median AQI = MEDIAN ( fact_city_day[AQI_clean] )
+
+// Format: percentage, 0 places. India's 24-hour PM2.5 standard is 60 ug/m3
+% Days Above Standard =
+DIVIDE (
+    CALCULATE ( COUNTROWS ( fact_city_day ), fact_city_day[PM25] > 60 ),
+    [Days Measured]
+)
+
+// Format: percentage, 0 places
+% Days Poor or Worse =
+DIVIDE (
+    CALCULATE ( COUNTROWS ( fact_city_day ), fact_city_day[AQI_clean] > 200 ),
+    CALCULATE ( COUNTROWS ( fact_city_day ), NOT ISBLANK ( fact_city_day[AQI_clean] ) )
+)
+
+// Format: decimal, 1 place, then add "x" as a suffix in the card
+Winter vs Monsoon =
+DIVIDE (
+    CALCULATE ( [Median PM2.5], dim_date[Month] IN { 11, 12, 1 } ),
+    CALCULATE ( [Median PM2.5], dim_date[Month] IN { 6, 7, 8, 9 } )
+)
+
+// Text
+Worst City =
+VAR t =
+    ADDCOLUMNS ( VALUES ( dim_city[City] ), "@share", [% Days Above Standard] )
+RETURN
+    MAXX ( TOPN ( 1, FILTER ( t, NOT ISBLANK ( [@share] ) ), [@share], DESC ), dim_city[City] )
+
+// Text
+Worst Month =
+VAR t =
+    ADDCOLUMNS ( VALUES ( dim_date[MonthName] ), "@pm", [Median PM2.5] )
+RETURN
+    MAXX ( TOPN ( 1, FILTER ( t, NOT ISBLANK ( [@pm] ) ), [@pm], DESC ), dim_date[MonthName] )
+
+// Text: the pollutant that most often sets the AQI
+Main Pollutant =
+VAR t =
+    ADDCOLUMNS (
+        FILTER ( VALUES ( fact_city_day[dominant_pollutant] ), NOT ISBLANK ( fact_city_day[dominant_pollutant] ) ),
+        "@n", CALCULATE ( COUNTROWS ( fact_city_day ) )
+    )
+RETURN
+    MAXX ( TOPN ( 1, t, [@n], DESC ), fact_city_day[dominant_pollutant] )
+
+// Whole number. Use with dim_aqi_category[category] as the legend
+Days = COUNTROWS ( fact_city_day )
+
+// Format: decimal, 0 places. 7-day rolling average for daily line charts
+PM2.5 (7-day avg) =
+AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Median PM2.5] )
+
+// Text: dynamic sentence for the City explorer page
+City Narrative =
+VAR c = SELECTEDVALUE ( dim_city[City], "All cities" )
+RETURN
+    c & ": PM2.5 broke India's daily limit on " & FORMAT ( [% Days Above Standard], "0%" )
+        & " of measured days. Worst month: " & [Worst Month]
+        & ". The AQI is usually set by " & [Main Pollutant] & "."
+
+// Text: colour for conditional formatting (Format > Colors > fx > Field value)
+Median AQI Colour =
+VAR a = [Median AQI]
+RETURN
+    SWITCH (
+        TRUE (),
+        ISBLANK ( a ), "#E1E0D9",
+        a <= 50, "#EEA07C",
+        a <= 100, "#E27B52",
+        a <= 200, "#CF5A31",
+        a <= 300, "#AD3F1D",
+        a <= 400, "#832A12",
+        "#561A0B"
+    )
+
+
+// ---------- 2. Lockdown counterfactual (ml_counterfactual, ml_lockdown_effect) ----------
+
+// Format: decimal, 0 places
+Actual = AVERAGE ( ml_counterfactual[actual] )
+Expected Without Lockdown = AVERAGE ( ml_counterfactual[predicted_bau] )
+Band Low = AVERAGE ( ml_counterfactual[band_low] )
+Band High = AVERAGE ( ml_counterfactual[band_high] )
+
+// Smoothed versions for the line chart (format: decimal, 0 places)
+Actual (7-day) =
+AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Actual] )
+Expected (7-day) =
+AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Expected Without Lockdown] )
+Band Low (7-day) =
+AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Band Low] )
+Band High (7-day) =
+AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Band High] )
+
+// Format: percentage, 0 places
+Naive Change = DIVIDE ( MEDIAN ( ml_lockdown_effect[naive_change_pct] ), 100 )
+Weather-Adjusted Change = DIVIDE ( MEDIAN ( ml_lockdown_effect[weather_adjusted_change_pct] ), 100 )
+
+// Format: percentage, 0 places (KPI cards)
+PM2.5 Drop (Naive) = CALCULATE ( [Naive Change], ml_lockdown_effect[pollutant] = "PM25" )
+PM2.5 Drop (Weather-Adjusted) = CALCULATE ( [Weather-Adjusted Change], ml_lockdown_effect[pollutant] = "PM25" )
+NO2 Drop (Weather-Adjusted) = CALCULATE ( [Weather-Adjusted Change], ml_lockdown_effect[pollutant] = "NO2" )
+
+// Format: percentage, 0 places. How much of the naive PM2.5 drop was really the weather
+Weather Share of PM2.5 Drop = 1 - DIVIDE ( [PM2.5 Drop (Weather-Adjusted)], [PM2.5 Drop (Naive)] )
+
+
+// ---------- 3. Early-warning model (ml_predictions, ml_confusion, ml_model_metrics) ----------
+
+// Format: percentage, 0 places
+Model Accuracy = AVERAGE ( ml_predictions[model_correct] )
+Baseline Accuracy = AVERAGE ( ml_predictions[baseline_correct] )
+
+// Format: percentage, 1 place, show "+"
+Accuracy Gain = [Model Accuracy] - [Baseline Accuracy]
+
+// Format: percentage, 0 places. Share of Poor-or-worse days that were predicted as Poor-or-worse
+Poor+ Recall (Model) =
+DIVIDE (
+    CALCULATE (
+        COUNTROWS ( ml_predictions ),
+        ml_predictions[actual_category_rank] >= 4,
+        ml_predictions[predicted_category_rank] >= 4
+    ),
+    CALCULATE ( COUNTROWS ( ml_predictions ), ml_predictions[actual_category_rank] >= 4 )
+)
+
+Poor+ Recall (Baseline) =
+DIVIDE (
+    CALCULATE (
+        COUNTROWS ( ml_predictions ),
+        ml_predictions[actual_category_rank] >= 4,
+        ml_predictions[baseline_category_rank] >= 4
+    ),
+    CALCULATE ( COUNTROWS ( ml_predictions ), ml_predictions[actual_category_rank] >= 4 )
+)
+
+// Format: percentage, 0 places. Accuracy on the days the category changed (the baseline always scores 0 here)
+Accuracy On Change Days =
+CALCULATE (
+    [Model Accuracy],
+    FILTER ( ml_predictions, ml_predictions[actual_category] <> ml_predictions[baseline_category] )
+)
+
+// Format: whole number
+Confusion Days = SUM ( ml_confusion[days] )
+
+// Format: percentage, 0 places. Row % for the confusion matrix
+Confusion Row % =
+DIVIDE (
+    [Confusion Days],
+    CALCULATE ( [Confusion Days], REMOVEFILTERS ( ml_confusion[predicted], ml_confusion[predicted_rank] ) )
+)
+
+// Format: decimal, 3 places
+Metric Value = AVERAGE ( ml_model_metrics[value] )
+
+
+// ---------- 4. Data quality (cleaning_log, data_quality, fact_city_day) ----------
+
+// Format: whole number, thousands separator
+Values Fixed or Flagged = SUM ( cleaning_log[rows_affected] )
+Sensor Faults Removed = SUM ( fact_city_day[pm_fault_flag] )
+
+// Format: decimal, 1 place
+Missing Before % = AVERAGE ( data_quality[missing_raw_pct] )
+Missing After % = AVERAGE ( data_quality[missing_clean_pct] )
+
+// Format: decimal, 0 places
+Median Official AQI = MEDIAN ( fact_city_day[AQI_official] )

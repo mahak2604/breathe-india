@@ -1,0 +1,24 @@
+step,table,issue,action,reason,rows_affected
+1,city_day,Date stored as text,Parsed to datetime with an explicit format (0 failures),"Needed for joins on date, lags and seasonal features",29531
+2,all,Possible duplicate rows or keys,Checked all tables; none found. Uniqueness is enforced again by the database keys,Keys must be unique for one-to-one joins,0
+3,city_day,Ahmedabad CO equals NO on most days (r = 0.999) although units differ 1000x,Set all Ahmedabad CO values to missing and flagged the rows,Corrupted CO also inflates the official AQI; see the AQI rebuild step,1400
+4,city_day,Exact 0.00 daily means for CO and NOx,Set to missing,A city-wide daily average of exactly zero is impossible for combustion gases: these are sensor drop-outs,3068
+5,city_day,Exact zeros in Benzene / Toluene / Xylene,Kept as-is,"Plausible 'below detection limit' readings, and these columns are not used in the models",8410
+6,city_day,Xylene is 61% missing,Dropped the column,Too sparse to impute or analyse reliably,11422
+7,city_day,Stuck sensor: identical PM value repeated 4+ days in a row,Set to missing,Real daily averages never repeat to two decimals for days; the instrument had frozen,30
+8,city_day,PM2.5 greater than PM10 (impossible: PM2.5 is a subset of PM10),Removed whichever of the two was further from the city's normal level for that month,"Data-driven: PM2.5 was the abnormal value in 94% of cases, overturning our first assumption that PM10 was wrong",256
+9,city_day,"Spikes > 3.5 robust SD above the city-month norm, outside known episodes",Set to missing (pm_fault_flag),Mostly monsoon days and instrument-ceiling values such as 950 and 1000 ug/m3 in clean cities: sensor faults,167
+10,city_day,Equally extreme values during Diwali or North India's crop-burning season,Kept and flagged (episode_flag),"These are documented real pollution events, exactly what the project studies",5
+11,city_day,Short sensor gaps (1-3 consecutive days),Linear interpolation within each city,Pollution is autocorrelated over 1-3 days; longer gaps are left missing rather than invented,3700
+12,city_day,Rows with no pollutant readings and no AQI,Dropped,They carry no information (weather is joined later from its own source),1271
+13,city_day,Official AQI above 500 (scale maximum),Capped at 500,500 is the top of the CPCB scale; higher numbers are off-scale artefacts,543
+14,city_day,Official AQI computed from a faulty PM reading,Replaced with the AQI recalculated from the cleaned pollutants,Keeps the AQI consistent with the corrected measurements,362
+15,city_day,Ahmedabad's official AQI is driven by the corrupted CO column,Replaced with the AQI recalculated without CO,Official numbers are not usable for this city,1576
+16,city_day,AQI missing although pollutants were measured,Filled with the recalculated AQI and flagged in aqi_source,Recalculation matches official AQI with r = 0.94; source kept so analyses can exclude it,1044
+17,city_day,AQI_Bucket must agree with AQI after the changes above,Re-derived the category from the cleaned AQI,Guarantees label and number never disagree,25946
+18,stations,Station status missing for 97 of 230 stations,Filled with 'Unknown',Missing does not mean inactive; 'Unknown' keeps the station in drill-downs,97
+19,stations,"StationName packs place, city and agency in one string ('Secretariat, Amaravati - APPCB')",Split into station_place and agency,Allows filtering by monitoring agency in the dashboard,230
+20,weather,Weather data quality,Range and completeness checks passed; no changes,Reanalysis data is gap-free; checking is still required before joining,0
+21,city_coords,'Amaravati' matches 3 places in India,Geocoding restricted to the expected state (Andhra Pradesh),City names must refer to the same place in every source,1
+22,city_coords,Kaggle 'Brajrajnagar' vs GeoNames 'Brajarajnagar',"Searched the GeoNames spelling, kept the Kaggle name as key",City names must refer to the same place in every source,1
+23,city_coords,Geocoder's 'Jorapokhar' is a village ~160 km from the CPCB station,"Used Jharia (Dhanbad), where the station is",City names must refer to the same place in every source,1

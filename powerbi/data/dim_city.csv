@@ -1,0 +1,27 @@
+City,latitude,longitude,elevation_m,population,State,Region,is_coastal,first_date,last_date,days_with_data,aqi_days,pm25_level,seasonality,cluster
+Ahmedabad,23.02579,72.58727,56.0,6357693.0,Gujarat,West,0,2015-01-01,2020-07-01,1576,1393,72.07,2.01,High all year
+Aizawl,23.72894,92.71791,1080.0,293416.0,Mizoram,North-East,0,2020-03-11,2020-07-01,113,113,,,Not enough data
+Amaravati,16.514,80.516,22.0,103000.0,Andhra Pradesh,South,0,2017-11-24,2020-07-01,901,901,25.72,3.9,"Clean monsoon, smoggy winter"
+Amritsar,31.62234,74.87534,244.0,1159227.0,Punjab,North,0,2017-02-27,2020-07-01,1204,1195,42.36,1.92,Steady year-round
+Bengaluru,12.97194,77.59369,920.0,8495492.0,Karnataka,South,0,2015-01-01,2020-07-01,2009,1931,33.73,1.96,Steady year-round
+Bhopal,23.25469,77.40289,523.0,1798218.0,Madhya Pradesh,Central,0,2019-09-17,2020-07-01,280,280,,,Not enough data
+Brajrajnagar,21.81667,83.91667,219.0,80403.0,Odisha,East,0,2017-12-07,2020-06-26,807,791,57.36,2.94,High all year
+Chandigarh,30.73629,76.7884,351.0,970602.0,Chandigarh,North,0,2019-09-02,2020-07-01,304,304,,,Not enough data
+Chennai,13.08784,80.27847,14.0,4681087.0,Tamil Nadu,South,1,2015-01-01,2020-07-01,1993,1902,46.03,1.25,Steady year-round
+Coimbatore,11.00555,76.96612,411.0,2136916.0,Tamil Nadu,South,0,2019-06-12,2020-07-01,386,385,28.35,1.56,Steady year-round
+Delhi,28.65195,77.23149,227.0,11034555.0,Delhi,North,0,2015-01-01,2020-07-01,2009,2009,87.92,3.93,High all year
+Ernakulam,9.96714,76.29036,11.0,,Kerala,South,1,2020-01-22,2020-07-01,162,162,,,Not enough data
+Gurugram,28.4601,77.02635,228.0,886519.0,Haryana,North,0,2015-11-27,2020-07-01,1658,1546,88.9,2.87,High all year
+Guwahati,26.1844,91.7458,59.0,962334.0,Assam,North-East,0,2019-02-16,2020-07-01,502,501,45.81,4.88,"Clean monsoon, smoggy winter"
+Hyderabad,17.38405,78.45636,515.0,6993262.0,Telangana,South,0,2015-01-04,2020-07-01,2002,1901,44.87,3.03,"Clean monsoon, smoggy winter"
+Jaipur,26.91962,75.78781,435.0,3046163.0,Rajasthan,North,0,2017-06-19,2020-07-01,1109,1106,48.96,1.81,Steady year-round
+Jorapokhar,23.74079,86.41456,204.0,86938.0,Jharkhand,East,0,2017-04-20,2020-07-01,986,941,,,Not enough data
+Kochi,9.93988,76.26022,9.0,633553.0,Kerala,South,1,2020-01-22,2020-07-01,162,162,,,Not enough data
+Kolkata,22.56263,88.36304,11.0,4631392.0,West Bengal,East,0,2018-04-10,2020-07-01,814,761,45.12,5.52,"Clean monsoon, smoggy winter"
+Lucknow,26.83928,80.92313,126.0,2472011.0,Uttar Pradesh,North,0,2015-01-01,2020-07-01,1996,1911,84.42,4.24,High all year
+Mumbai,19.07283,72.88261,8.0,12691836.0,Maharashtra,West,1,2015-01-01,2020-07-01,1838,789,24.81,4.52,"Clean monsoon, smoggy winter"
+Patna,25.59408,85.13563,53.0,1684297.0,Bihar,East,0,2015-06-01,2020-07-01,1788,1553,77.76,4.89,High all year
+Shillong,25.56892,91.88313,1507.0,143229.0,Meghalaya,North-East,0,2019-08-27,2020-07-01,280,258,17.35,1.14,Steady year-round
+Talcher,20.94927,85.23354,80.0,40841.0,Odisha,East,0,2017-12-20,2020-07-01,828,792,39.72,4.38,"Clean monsoon, smoggy winter"
+Thiruvananthapuram,8.4855,76.94924,18.0,788271.0,Kerala,South,1,2017-06-16,2020-07-01,1106,1093,20.62,2.97,"Clean monsoon, smoggy winter"
+Visakhapatnam,17.68009,83.20161,24.0,1063178.0,Andhra Pradesh,South,1,2016-07-01,2020-07-01,1447,1266,34.82,2.13,Steady year-round

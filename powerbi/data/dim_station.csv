@@ -1,0 +1,111 @@
+StationId,StationName,station_place,agency,City,State,Status,days_reported,first_date,last_date,pm25_mean,pm25_median,share_days_above_naaqs
+AP001,"Secretariat, Amaravati - APPCB",Secretariat,APPCB,Amaravati,Andhra Pradesh,Active,892.0,2017-11-24,2020-07-01,37.773,28.015,0.209
+AP005,"GVM Corporation, Visakhapatnam - APPCB",GVM Corporation,APPCB,Visakhapatnam,Andhra Pradesh,Active,1232.0,2016-07-01,2020-07-01,46.97,40.61,0.278
+AS001,"Railway Colony, Guwahati - APCB",Railway Colony,APCB,Guwahati,Assam,Active,501.0,2019-02-16,2020-07-01,63.685,46.78,0.405
+BR005,"DRM Office Danapur, Patna - BSPCB",DRM Office Danapur,BSPCB,Patna,Bihar,Active,37.0,2020-03-06,2020-06-26,53.107,43.63,0.378
+BR006,"Govt. High School Shikarpur, Patna - BSPCB",Govt. High School Shikarpur,BSPCB,Patna,Bihar,Active,118.0,2020-03-03,2020-07-01,43.484,31.87,0.186
+BR007,"IGSC Planetarium Complex, Patna - BSPCB",IGSC Planetarium Complex,BSPCB,Patna,Bihar,Active,1459.0,2015-10-01,2020-07-01,131.15,98.66,0.725
+BR008,"Muradpur, Patna - BSPCB",Muradpur,BSPCB,Patna,Bihar,Active,188.0,2019-12-24,2020-07-01,51.795,44.0,0.319
+BR009,"Rajbansi Nagar, Patna - BSPCB",Rajbansi Nagar,BSPCB,Patna,Bihar,Active,191.0,2019-12-24,2020-07-01,49.76,42.99,0.319
+BR010,"Samanpura, Patna - BSPCB",Samanpura,BSPCB,Patna,Bihar,Active,190.0,2019-12-24,2020-07-01,68.261,58.03,0.479
+CH001,"Sector-25, Chandigarh - CPCC",Sector-25,CPCC,Chandigarh,Chandigarh,Active,289.0,2019-09-02,2020-07-01,41.13,33.27,0.194
+DL001,"Alipur, Delhi - DPCC",Alipur,DPCC,Delhi,Delhi,Active,583.0,2018-11-11,2020-07-01,107.084,78.25,0.619
+DL002,"Anand Vihar, Delhi - DPCC",Anand Vihar,DPCC,Delhi,Delhi,Active,1627.0,2015-04-04,2020-07-01,153.363,116.95,0.817
+DL003,"Ashok Vihar, Delhi - DPCC",Ashok Vihar,DPCC,Delhi,Delhi,Active,879.0,2018-02-01,2020-07-01,113.444,83.17,0.642
+DL004,"Aya Nagar, Delhi - IMD",Aya Nagar,IMD,Delhi,Delhi,Active,983.0,2017-09-07,2020-07-01,89.079,67.52,0.565
+DL005,"Bawana, Delhi - DPCC",Bawana,DPCC,Delhi,Delhi,Active,722.0,2018-07-04,2020-07-01,121.249,94.455,0.694
+DL006,"Burari Crossing, Delhi - IMD",Burari Crossing,IMD,Delhi,Delhi,Inactive,662.0,2017-08-31,2019-12-13,120.629,99.21,0.785
+DL007,"CRRI Mathura Road, Delhi - IMD",CRRI Mathura Road,IMD,Delhi,Delhi,Active,1200.0,2015-01-01,2020-07-01,117.6,95.89,0.713
+DL008,"DTU, Delhi - CPCB",DTU,CPCB,Delhi,Delhi,Active,974.0,2015-03-23,2020-07-01,131.412,95.475,0.695
+DL009,"Dr. Karni Singh Shooting Range, Delhi - DPCC",Dr. Karni Singh Shooting Range,DPCC,Delhi,Delhi,Active,853.0,2018-02-03,2020-07-01,83.157,53.16,0.435
+DL010,"Dwarka-Sector 8, Delhi - DPCC",Dwarka-Sector 8,DPCC,Delhi,Delhi,Active,881.0,2018-02-01,2020-07-01,103.398,80.49,0.628
+DL011,"East Arjun Nagar, Delhi - CPCB",East Arjun Nagar,CPCB,Delhi,Delhi,Active,,,,,,
+DL012,"IGI Airport (T3), Delhi - IMD",IGI Airport (T3),IMD,Delhi,Delhi,Active,969.0,2017-08-31,2020-07-01,91.713,69.49,0.56
+DL013,"IHBAS, Dilshad Garden, Delhi - CPCB","IHBAS, Dilshad Garden",CPCB,Delhi,Delhi,Active,1305.0,2015-01-01,2020-07-01,107.714,92.58,0.75
+DL014,"ITO, Delhi - CPCB",ITO,CPCB,Delhi,Delhi,Active,981.0,2015-01-09,2020-07-01,119.322,94.0,0.747
+DL015,"Jahangirpuri, Delhi - DPCC",Jahangirpuri,DPCC,Delhi,Delhi,Active,881.0,2018-02-01,2020-07-01,128.203,100.83,0.713
+DL016,"Jawaharlal Nehru Stadium, Delhi - DPCC",Jawaharlal Nehru Stadium,DPCC,Delhi,Delhi,Active,878.0,2018-02-01,2020-07-01,97.49,68.065,0.559
+DL017,"Lodhi Road, Delhi - IMD",Lodhi Road,IMD,Delhi,Delhi,Active,981.0,2017-09-07,2020-07-01,91.289,68.39,0.572
+DL018,"Major Dhyan Chand National Stadium, Delhi - DPCC",Major Dhyan Chand National Stadium,DPCC,Delhi,Delhi,Active,880.0,2018-02-01,2020-07-01,92.752,72.715,0.586
+DL019,"Mandir Marg, Delhi - DPCC",Mandir Marg,DPCC,Delhi,Delhi,Active,1415.0,2015-04-09,2020-07-01,102.772,77.71,0.627
+DL020,"Mundka, Delhi - DPCC",Mundka,DPCC,Delhi,Delhi,Active,727.0,2018-07-03,2020-07-01,122.533,86.93,0.652
+DL021,"NSIT Dwarka, Delhi - CPCB",NSIT Dwarka,CPCB,Delhi,Delhi,Active,1609.0,2015-03-23,2020-07-01,116.115,100.45,0.778
+DL022,"Najafgarh, Delhi - DPCC",Najafgarh,DPCC,Delhi,Delhi,Active,871.0,2018-02-01,2020-07-01,86.444,72.29,0.584
+DL023,"Narela, Delhi - DPCC",Narela,DPCC,Delhi,Delhi,Active,867.0,2018-02-01,2020-07-01,110.039,89.61,0.694
+DL024,"Nehru Nagar, Delhi - DPCC",Nehru Nagar,DPCC,Delhi,Delhi,Active,881.0,2018-02-01,2020-07-01,116.845,75.22,0.615
+DL025,"North Campus, DU, Delhi - IMD","North Campus, DU",IMD,Delhi,Delhi,Active,932.0,2017-08-31,2020-07-01,108.103,80.86,0.611
+DL026,"Okhla Phase-2, Delhi - DPCC",Okhla Phase-2,DPCC,Delhi,Delhi,Active,880.0,2018-02-01,2020-07-01,100.399,73.965,0.595
+DL027,"Patparganj, Delhi - DPCC",Patparganj,DPCC,Delhi,Delhi,Active,877.0,2018-02-01,2020-07-01,94.123,69.74,0.571
+DL028,"Punjabi Bagh, Delhi - DPCC",Punjabi Bagh,DPCC,Delhi,Delhi,Active,1511.0,2015-04-07,2020-07-01,119.812,88.34,0.685
+DL029,"Pusa, Delhi - DPCC",Pusa,DPCC,Delhi,Delhi,Active,706.0,2018-07-03,2020-07-01,97.001,63.99,0.53
+DL030,"Pusa, Delhi - IMD",Pusa,IMD,Delhi,Delhi,Active,951.0,2017-09-06,2020-07-01,83.643,61.75,0.531
+DL031,"R K Puram, Delhi - DPCC",R K Puram,DPCC,Delhi,Delhi,Active,1701.0,2015-04-04,2020-07-01,119.42,92.95,0.721
+DL032,"Rohini, Delhi - DPCC",Rohini,DPCC,Delhi,Delhi,Active,867.0,2018-02-01,2020-06-26,122.814,89.7,0.69
+DL033,"Shadipur, Delhi - CPCB",Shadipur,CPCB,Delhi,Delhi,Active,1075.0,2015-03-23,2020-07-01,112.0,91.55,0.692
+DL034,"Sirifort, Delhi - CPCB",Sirifort,CPCB,Delhi,Delhi,Active,1272.0,2016-11-03,2020-07-01,118.88,83.37,0.655
+DL035,"Sonia Vihar, Delhi - DPCC",Sonia Vihar,DPCC,Delhi,Delhi,Active,878.0,2018-02-01,2020-07-01,104.147,79.185,0.629
+DL036,"Sri Aurobindo Marg, Delhi - DPCC",Sri Aurobindo Marg,DPCC,Delhi,Delhi,Active,728.0,2018-07-03,2020-07-01,85.241,57.615,0.481
+DL037,"Vivek Vihar, Delhi - DPCC",Vivek Vihar,DPCC,Delhi,Delhi,Active,878.0,2018-02-01,2020-07-01,106.923,76.785,0.628
+DL038,"Wazirpur, Delhi - DPCC",Wazirpur,DPCC,Delhi,Delhi,Active,879.0,2018-02-01,2020-07-01,127.626,94.1,0.727
+GJ001,"Maninagar, Ahmedabad - GPCB",Maninagar,GPCB,Ahmedabad,Gujarat,Active,1381.0,2015-01-28,2020-07-01,67.854,58.37,0.48
+HR011,"NISE Gwal Pahari, Gurugram - IMD",NISE Gwal Pahari,IMD,Gurugram,Haryana,Active,752.0,2017-12-31,2020-07-01,103.102,81.62,0.669
+HR012,"Sector-51, Gurugram - HSPCB",Sector-51,HSPCB,Gurugram,Haryana,Active,119.0,2020-03-05,2020-07-01,54.612,51.99,0.336
+HR013,"Teri Gram, Gurugram - HSPCB",Teri Gram,HSPCB,Gurugram,Haryana,Active,119.0,2020-03-05,2020-07-01,54.37,54.2,0.361
+HR014,"Vikas Sadan, Gurugram - HSPCB",Vikas Sadan,HSPCB,Gurugram,Haryana,Active,1460.0,2016-01-22,2020-07-01,115.468,88.22,0.702
+JH001,"Tata Stadium, Jorapokhar - JSPCB",Tata Stadium,JSPCB,Jorapokhar,Jharkhand,Active,379.0,2019-01-09,2020-06-02,64.229,60.69,0.515
+KA002,"BTM Layout, Bengaluru - CPCB",BTM Layout,CPCB,Bengaluru,Karnataka,Active,859.0,2018-01-09,2020-07-01,38.114,28.48,0.156
+KA003,"BWSSB Kadabesanahalli, Bengaluru - CPCB",BWSSB Kadabesanahalli,CPCB,Bengaluru,Karnataka,Active,1675.0,2015-03-20,2020-07-01,34.1,26.65,0.094
+KA004,"Bapuji Nagar, Bengaluru - KSPCB",Bapuji Nagar,KSPCB,Bengaluru,Karnataka,Active,680.0,2018-06-25,2020-07-01,35.794,33.635,0.084
+KA005,"City Railway Station, Bengaluru - KSPCB",City Railway Station,KSPCB,Bengaluru,Karnataka,Active,,,,,,
+KA006,"Hebbal, Bengaluru - KSPCB",Hebbal,KSPCB,Bengaluru,Karnataka,Active,684.0,2018-06-25,2020-07-01,28.856,25.865,0.053
+KA007,"Hombegowda Nagar, Bengaluru - KSPCB",Hombegowda Nagar,KSPCB,Bengaluru,Karnataka,Active,677.0,2018-07-03,2020-07-01,27.482,24.69,0.034
+KA008,"Jayanagar 5th Block, Bengaluru - KSPCB",Jayanagar 5th Block,KSPCB,Bengaluru,Karnataka,Active,672.0,2018-06-25,2020-07-01,32.688,28.275,0.092
+KA009,"Peenya, Bengaluru - CPCB",Peenya,CPCB,Bengaluru,Karnataka,Active,1714.0,2015-03-23,2020-07-01,42.441,35.385,0.152
+KA010,"Sanegurava Halli, Bengaluru - KSPCB",Sanegurava Halli,KSPCB,Bengaluru,Karnataka,Active,,,,,,
+KA011,"Silk Board, Bengaluru - KSPCB",Silk Board,KSPCB,Bengaluru,Karnataka,Active,712.0,2018-06-29,2020-07-01,32.424,29.75,0.051
+KL002,"Kacheripady, Ernakulam - Kerala PCB",Kacheripady,Kerala PCB,Ernakulam,Kerala,Unknown,158.0,2020-01-22,2020-07-01,24.945,19.755,0.013
+KL004,"Vyttila, Kochi - Kerala PCB",Vyttila,Kerala PCB,Kochi,Kerala,Unknown,162.0,2020-01-22,2020-07-01,31.429,24.285,0.111
+KL007,"Kariavattom, Thiruvananthapuram - Kerala PCB",Kariavattom,Kerala PCB,Thiruvananthapuram,Kerala,Active,131.0,2020-02-13,2020-06-30,28.8,27.93,0.015
+KL008,"Plammoodu, Thiruvananthapuram - Kerala PCB",Plammoodu,Kerala PCB,Thiruvananthapuram,Kerala,Active,1067.0,2017-06-16,2020-07-01,27.283,21.49,0.075
+MP001,"T T Nagar, Bhopal - MPPCB",T T Nagar,MPPCB,Bhopal,Madhya Pradesh,Active,280.0,2019-09-17,2020-07-01,50.06,44.84,0.336
+MH005,"Bandra, Mumbai - MPCB",Bandra,MPCB,Mumbai,Maharashtra,Active,744.0,2018-04-26,2020-07-01,32.054,24.0,0.102
+MH006,"Borivali East, Mumbai - MPCB",Borivali East,MPCB,Mumbai,Maharashtra,Active,302.0,2019-06-12,2020-04-09,29.418,20.9,0.139
+MH007,"Chhatrapati Shivaji Intl. Airport (T2), Mumbai - MPCB",Chhatrapati Shivaji Intl. Airport (T2),MPCB,Mumbai,Maharashtra,Active,357.0,2019-06-04,2020-07-01,41.382,23.95,0.319
+MH008,"Colaba, Mumbai - MPCB",Colaba,MPCB,Mumbai,Maharashtra,Active,358.0,2019-06-24,2020-06-30,37.944,20.405,0.274
+MH009,"Kurla, Mumbai - MPCB",Kurla,MPCB,Mumbai,Maharashtra,Active,361.0,2019-06-06,2020-07-01,40.283,23.37,0.302
+MH010,"Powai, Mumbai - MPCB",Powai,MPCB,Mumbai,Maharashtra,Active,390.0,2019-06-04,2020-07-01,32.196,20.035,0.2
+MH011,"Sion, Mumbai - MPCB",Sion,MPCB,Mumbai,Maharashtra,Active,362.0,2019-06-20,2020-07-01,41.186,24.97,0.285
+MH012,"Vasai West, Mumbai - MPCB",Vasai West,MPCB,Mumbai,Maharashtra,Active,295.0,2019-06-03,2020-06-30,40.384,24.34,0.292
+MH013,"Vile Parle West, Mumbai - MPCB",Vile Parle West,MPCB,Mumbai,Maharashtra,Active,330.0,2019-06-03,2020-06-29,38.185,19.97,0.288
+MH014,"Worli, Mumbai - MPCB",Worli,MPCB,Mumbai,Maharashtra,Active,379.0,2019-06-11,2020-07-01,36.584,19.57,0.259
+ML001,"Lumpyngngad, Shillong - Meghalaya PCB",Lumpyngngad,Meghalaya PCB,Shillong,Meghalaya,Active,246.0,2019-08-27,2020-07-01,30.824,17.425,0.049
+MZ001,"Sikulpuikawn, Aizawl - Mizoram PCB",Sikulpuikawn,Mizoram PCB,Aizawl,Mizoram,Active,111.0,2020-03-11,2020-07-01,17.13,10.48,0.0
+OD001,"GM Office, Brajrajnagar - OSPCB",GM Office,OSPCB,Brajrajnagar,Odisha,Active,753.0,2017-12-07,2020-06-26,64.058,60.63,0.503
+OD002,"Talcher Coalfields,Talcher - OSPCB",Talcher Coalfields,OSPCB,Talcher,Odisha,Active,741.0,2018-02-07,2020-07-01,61.405,44.64,0.379
+PB001,"Golden Temple, Amritsar - PPCB",Golden Temple,PPCB,Amritsar,Punjab,Active,1093.0,2017-02-27,2020-07-01,55.468,44.09,0.288
+RJ004,"Adarsh Nagar, Jaipur - RSPCB",Adarsh Nagar,RSPCB,Jaipur,Rajasthan,Active,993.0,2017-10-13,2020-07-01,43.323,40.34,0.157
+RJ005,"Police Commissionerate, Jaipur - RSPCB",Police Commissionerate,RSPCB,Jaipur,Rajasthan,Active,1083.0,2017-06-19,2020-07-01,67.112,59.69,0.497
+RJ006,"Shastri Nagar, Jaipur - RSPCB",Shastri Nagar,RSPCB,Jaipur,Rajasthan,Active,981.0,2017-10-24,2020-07-01,56.611,47.28,0.3
+TN001,"Alandur Bus Depot, Chennai - CPCB",Alandur Bus Depot,CPCB,Chennai,Tamil Nadu,Active,1731.0,2015-03-26,2020-07-01,55.223,45.5,0.304
+TN002,"Manali Village, Chennai - TNPCB",Manali Village,TNPCB,Chennai,Tamil Nadu,Active,350.0,2019-06-19,2020-07-01,24.677,20.1,0.054
+TN003,"Manali, Chennai - CPCB",Manali,CPCB,Chennai,Tamil Nadu,Active,1445.0,2015-03-23,2020-07-01,60.104,54.19,0.428
+TN004,"Velachery Res. Area, Chennai - CPCB",Velachery Res. Area,CPCB,Chennai,Tamil Nadu,Active,1450.0,2015-04-06,2020-07-01,36.916,31.48,0.123
+TN005,"SIDCO Kurichi, Coimbatore - TNPCB",SIDCO Kurichi,TNPCB,Coimbatore,Tamil Nadu,Active,378.0,2019-06-12,2020-06-30,29.152,28.515,0.005
+TG001,"Bollaram Industrial Area, Hyderabad - TSPCB",Bollaram Industrial Area,TSPCB,Hyderabad,Telangana,Active,968.0,2017-02-15,2020-07-01,43.142,41.97,0.217
+TG002,"Central University, Hyderabad - TSPCB",Central University,TSPCB,Hyderabad,Telangana,Active,1075.0,2017-06-13,2020-07-01,34.501,29.24,0.142
+TG003,"ICRISAT Patancheru, Hyderabad - TSPCB",ICRISAT Patancheru,TSPCB,Hyderabad,Telangana,Active,1214.0,2017-02-15,2020-07-01,36.978,33.815,0.192
+TG004,"IDA Pashamylaram, Hyderabad - TSPCB",IDA Pashamylaram,TSPCB,Hyderabad,Telangana,Active,1362.0,2016-09-01,2020-07-01,40.974,39.015,0.258
+TG005,"Sanathnagar, Hyderabad - TSPCB",Sanathnagar,TSPCB,Hyderabad,Telangana,Active,1415.0,2015-03-31,2020-07-01,55.661,45.71,0.313
+TG006,"Zoo Park, Hyderabad - TSPCB",Zoo Park,TSPCB,Hyderabad,Telangana,Active,1185.0,2015-09-02,2020-07-01,49.679,51.9,0.371
+UP012,"Central School, Lucknow - CPCB",Central School,CPCB,Lucknow,Uttar Pradesh,Active,1735.0,2015-03-28,2020-07-01,93.496,72.65,0.559
+UP013,"Gomti Nagar, Lucknow - UPPCB",Gomti Nagar,UPPCB,Lucknow,Uttar Pradesh,Active,307.0,2019-08-21,2020-06-30,70.296,49.34,0.391
+UP014,"Lalbagh, Lucknow - CPCB",Lalbagh,CPCB,Lucknow,Uttar Pradesh,Active,1754.0,2015-03-20,2020-07-01,116.409,90.1,0.678
+UP015,"Nishant Ganj, Lucknow - UPPCB",Nishant Ganj,UPPCB,Lucknow,Uttar Pradesh,Inactive,601.0,2017-12-08,2019-08-21,109.504,82.66,0.654
+UP016,"Talkatora District Industries Center, Lucknow - CPCB",Talkatora District Industries Center,CPCB,Lucknow,Uttar Pradesh,Active,1007.0,2017-09-26,2020-07-01,134.776,116.08,0.803
+WB007,"Ballygunge, Kolkata - WBPCB",Ballygunge,WBPCB,Kolkata,West Bengal,Active,307.0,2019-08-30,2020-07-01,59.467,48.32,0.459
+WB008,"Bidhannagar, Kolkata - WBPCB",Bidhannagar,WBPCB,Kolkata,West Bengal,Active,312.0,2019-08-21,2020-07-01,41.912,29.8,0.304
+WB009,"Fort William, Kolkata - WBPCB",Fort William,WBPCB,Kolkata,West Bengal,Active,397.0,2019-05-31,2020-07-01,53.96,34.63,0.338
+WB010,"Jadavpur, Kolkata - WBPCB",Jadavpur,WBPCB,Kolkata,West Bengal,Active,392.0,2019-06-03,2020-07-01,40.789,29.245,0.263
+WB011,"Rabindra Bharati University, Kolkata - WBPCB",Rabindra Bharati University,WBPCB,Kolkata,West Bengal,Active,572.0,2018-11-06,2020-07-01,88.673,62.1,0.516
+WB012,"Rabindra Sarobar, Kolkata - WBPCB",Rabindra Sarobar,WBPCB,Kolkata,West Bengal,Active,304.0,2019-08-08,2020-07-01,45.157,36.13,0.359
+WB013,"Victoria, Kolkata - WBPCB",Victoria,WBPCB,Kolkata,West Bengal,Active,748.0,2018-04-10,2020-07-01,59.385,38.96,0.368
