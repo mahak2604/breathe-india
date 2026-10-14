@@ -1,5 +1,10 @@
 # Breathe India: Power BI build guide
 
+> **The finished dashboard is `Breathe_India.pbix`**, generated from code by `src/build_powerbi_project.py`.
+> This guide documents the same design step by step, so you can explain or rebuild any visual by hand in the viva.
+> The generated version differs in two small ways: the city map is a latitude/longitude scatter (Azure Maps needs a
+> Microsoft sign-in), and the 80% band is drawn as two dashed lines.
+
 Everything the dashboard needs is in this folder:
 
 | File | What it is |

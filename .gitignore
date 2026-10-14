@@ -5,3 +5,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 ~$*
+
+# Power BI local state
+powerbi/BreatheIndia/**/.pbi/

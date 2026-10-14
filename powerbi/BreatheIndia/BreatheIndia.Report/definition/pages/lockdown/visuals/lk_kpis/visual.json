@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "lk_kpis",
+  "position": {
+    "x": 24,
+    "y": 88,
+    "z": 1000,
+    "height": 96,
+    "width": 840,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "PM2.5 Drop (Naive)"
+                }
+              },
+              "queryRef": "_Measures.PM2.5 Drop (Naive)",
+              "nativeQueryRef": "PM2.5 Drop (Naive)",
+              "displayName": "PM2.5 vs 2019"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "PM2.5 Drop (Weather-Adjusted)"
+                }
+              },
+              "queryRef": "_Measures.PM2.5 Drop (Weather-Adjusted)",
+              "nativeQueryRef": "PM2.5 Drop (Weather-Adjusted)",
+              "displayName": "PM2.5, weather removed"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Weather Share of PM2.5 Drop"
+                }
+              },
+              "queryRef": "_Measures.Weather Share of PM2.5 Drop",
+              "nativeQueryRef": "Weather Share of PM2.5 Drop",
+              "displayName": "Drop due to weather"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "NO2 Drop (Weather-Adjusted)"
+                }
+              },
+              "queryRef": "_Measures.NO2 Drop (Weather-Adjusted)",
+              "nativeQueryRef": "NO2 Drop (Weather-Adjusted)",
+              "displayName": "NO₂, weather removed"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "24D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0B0B0B'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ],
+      "label": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#52514E'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

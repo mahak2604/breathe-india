@@ -1,0 +1,2143 @@
+{
+  "compatibilityLevel": 1606,
+  "model": {
+    "culture": "en-IN",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-IN",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "tables": [
+      {
+        "name": "_Measures",
+        "lineageTag": "2ffa7155-4ac1-5e6f-ac44-fe16111ef642",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "x",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "sourceColumn": "[x]",
+            "summarizeBy": "none",
+            "lineageTag": "610ea368-b6cb-56c2-a772-89d97065c984"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "_Measures",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "ROW ( \"x\", 0 )"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Days Measured",
+            "expression": "COUNT ( fact_city_day[PM25] )",
+            "lineageTag": "db41d1ec-f57c-5401-8345-4863ea40b449",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Cities",
+            "expression": "DISTINCTCOUNT ( fact_city_day[City] )",
+            "lineageTag": "0f7c8aab-147e-5623-a3b7-6f2895ab8065",
+            "formatString": "0"
+          },
+          {
+            "name": "Median PM2.5",
+            "expression": "MEDIAN ( fact_city_day[PM25] )",
+            "lineageTag": "9534eb12-d01a-514e-b87c-bd290467ac41",
+            "formatString": "0"
+          },
+          {
+            "name": "Median AQI",
+            "expression": "MEDIAN ( fact_city_day[AQI_clean] )",
+            "lineageTag": "2eb44a5f-54a6-5651-8b97-6ceac14c3e93",
+            "formatString": "0"
+          },
+          {
+            "name": "Median Official AQI",
+            "expression": "MEDIAN ( fact_city_day[AQI_official] )",
+            "lineageTag": "51d7f1ea-fb8d-5f55-97b5-4032aa7ec5ee",
+            "formatString": "0"
+          },
+          {
+            "name": "% Days Above Standard",
+            "expression": "DIVIDE ( CALCULATE ( COUNTROWS ( fact_city_day ), fact_city_day[PM25] > 60 ), [Days Measured] )",
+            "lineageTag": "f55d9e3a-b3dc-5601-aa6c-7cc7c3d684f2",
+            "formatString": "0%"
+          },
+          {
+            "name": "% Days Poor or Worse",
+            "expression": [
+              "DIVIDE (",
+              "    CALCULATE ( COUNTROWS ( fact_city_day ), fact_city_day[AQI_clean] > 200 ),",
+              "    CALCULATE ( COUNTROWS ( fact_city_day ), NOT ISBLANK ( fact_city_day[AQI_clean] ) )",
+              ")"
+            ],
+            "lineageTag": "76748eab-fc74-5ed3-a46a-c7110e3d51f1",
+            "formatString": "0%"
+          },
+          {
+            "name": "Winter vs Monsoon",
+            "expression": [
+              "DIVIDE (",
+              "    CALCULATE ( [Median PM2.5], dim_date[Month] IN { 11, 12, 1 } ),",
+              "    CALCULATE ( [Median PM2.5], dim_date[Month] IN { 6, 7, 8, 9 } )",
+              ")"
+            ],
+            "lineageTag": "3da2419d-2604-506c-bb72-47c4d37539ca",
+            "formatString": "0.0"
+          },
+          {
+            "name": "Worst City",
+            "expression": [
+              "VAR t = ADDCOLUMNS ( VALUES ( dim_city[City] ), \"@share\", [% Days Above Standard] )",
+              "RETURN MAXX ( TOPN ( 1, FILTER ( t, NOT ISBLANK ( [@share] ) ), [@share], DESC ), dim_city[City] )"
+            ],
+            "lineageTag": "84cbde1d-4e7c-5ed6-9c54-ef6db4ad1007"
+          },
+          {
+            "name": "Worst Month",
+            "expression": [
+              "VAR t = ADDCOLUMNS ( VALUES ( dim_date[MonthName] ), \"@pm\", [Median PM2.5] )",
+              "RETURN MAXX ( TOPN ( 1, FILTER ( t, NOT ISBLANK ( [@pm] ) ), [@pm], DESC ), dim_date[MonthName] )"
+            ],
+            "lineageTag": "fc4f62ec-e260-503e-b6bc-4158aa28ea05"
+          },
+          {
+            "name": "Main Pollutant",
+            "expression": [
+              "VAR t = ADDCOLUMNS (",
+              "    FILTER ( VALUES ( fact_city_day[dominant_pollutant] ), NOT ISBLANK ( fact_city_day[dominant_pollutant] ) ),",
+              "    \"@n\", CALCULATE ( COUNTROWS ( fact_city_day ) )",
+              ")",
+              "RETURN MAXX ( TOPN ( 1, t, [@n], DESC ), fact_city_day[dominant_pollutant] )"
+            ],
+            "lineageTag": "80cc2b33-7da5-57c0-bcb2-02f4d7eec4d0"
+          },
+          {
+            "name": "Days",
+            "expression": "COUNTROWS ( fact_city_day )",
+            "lineageTag": "81cdad0c-8710-564b-92c4-83542f3546e4",
+            "formatString": "#,0"
+          },
+          {
+            "name": "PM2.5 (7-day avg)",
+            "expression": "AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Median PM2.5] )",
+            "lineageTag": "73898de6-1d5e-58f6-990c-d5519ca393f4",
+            "formatString": "0"
+          },
+          {
+            "name": "City Narrative",
+            "expression": [
+              "VAR c = SELECTEDVALUE ( dim_city[City], \"All 26 cities\" )",
+              "RETURN",
+              "    c & \": \" & FORMAT ( [% Days Above Standard], \"0%\" ) & \" of days over the PM2.5 limit\"",
+              "        & \" · worst in \" & [Worst Month]"
+            ],
+            "lineageTag": "02447e59-28ed-5aa8-aea8-255f1c81b84d"
+          },
+          {
+            "name": "Days in AQI Band",
+            "expression": "CALCULATE ( COUNTROWS ( fact_city_day ), KEEPFILTERS ( NOT ISBLANK ( fact_city_day[AQI_Bucket_clean] ) ) )",
+            "lineageTag": "431f69d6-d936-5258-9119-fd3f90c97a37",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Median AQI Colour",
+            "expression": [
+              "VAR a = [Median AQI]",
+              "RETURN",
+              "    SWITCH (",
+              "        TRUE (),",
+              "        ISBLANK ( a ), \"#E1E0D9\",",
+              "        a <= 50, \"#EEA07C\",",
+              "        a <= 100, \"#E27B52\",",
+              "        a <= 200, \"#CF5A31\",",
+              "        a <= 300, \"#AD3F1D\",",
+              "        a <= 400, \"#832A12\",",
+              "        \"#561A0B\"",
+              "    )"
+            ],
+            "lineageTag": "5c6a7be1-03f4-534f-b7f1-e879c40bc8cc"
+          },
+          {
+            "name": "Station PM2.5",
+            "expression": "AVERAGE ( dim_station[pm25_mean] )",
+            "lineageTag": "864c366c-1984-5da1-83a9-fe9a8dcd5dfc",
+            "formatString": "0"
+          },
+          {
+            "name": "Station % Above Standard",
+            "expression": "AVERAGE ( dim_station[share_days_above_naaqs] )",
+            "lineageTag": "568bc44b-ddc8-58b3-9613-8def9d553d93",
+            "formatString": "0%"
+          },
+          {
+            "name": "Actual",
+            "expression": "AVERAGE ( ml_counterfactual[actual] )",
+            "lineageTag": "6b5c36c0-341f-51f0-9b56-4e0d7b8d1e61",
+            "formatString": "0"
+          },
+          {
+            "name": "Expected Without Lockdown",
+            "expression": "AVERAGE ( ml_counterfactual[predicted_bau] )",
+            "lineageTag": "9a9b8974-2c73-5cdb-831f-8a1960252c14",
+            "formatString": "0"
+          },
+          {
+            "name": "Band Low",
+            "expression": "AVERAGE ( ml_counterfactual[band_low] )",
+            "lineageTag": "4c7fada6-d365-5668-833e-f040a5c94a0d",
+            "formatString": "0"
+          },
+          {
+            "name": "Band High",
+            "expression": "AVERAGE ( ml_counterfactual[band_high] )",
+            "lineageTag": "c30aae38-0506-5d0a-b42e-55923f476240",
+            "formatString": "0"
+          },
+          {
+            "name": "Actual (7-day)",
+            "expression": "AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Actual] )",
+            "lineageTag": "40ffa44c-4e67-5ec3-bbcc-ecd5f472d4c6",
+            "formatString": "0"
+          },
+          {
+            "name": "Expected (7-day)",
+            "expression": "AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Expected Without Lockdown] )",
+            "lineageTag": "973b2442-7fb3-558b-8558-10a5bea058ee",
+            "formatString": "0"
+          },
+          {
+            "name": "Band Low (7-day)",
+            "expression": "AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Band Low] )",
+            "lineageTag": "270ea153-aec1-50c5-bbbf-f4b46eb55a54",
+            "formatString": "0"
+          },
+          {
+            "name": "Band High (7-day)",
+            "expression": "AVERAGEX ( DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -7, DAY ), [Band High] )",
+            "lineageTag": "7ee7b59a-a47d-5266-9214-b944de18af13",
+            "formatString": "0"
+          },
+          {
+            "name": "Naive Change",
+            "expression": "DIVIDE ( MEDIAN ( ml_lockdown_effect[naive_change_pct] ), 100 )",
+            "lineageTag": "c8dc9afd-183c-5a9f-aac3-f0a87b621d4e",
+            "formatString": "0%"
+          },
+          {
+            "name": "Weather-Adjusted Change",
+            "expression": "DIVIDE ( MEDIAN ( ml_lockdown_effect[weather_adjusted_change_pct] ), 100 )",
+            "lineageTag": "0c2b34b0-490d-5710-81dd-a7eafc0f69e4",
+            "formatString": "0%"
+          },
+          {
+            "name": "PM2.5 Drop (Naive)",
+            "expression": "CALCULATE ( [Naive Change], ml_lockdown_effect[pollutant] = \"PM25\" )",
+            "lineageTag": "0ba7d493-6402-57d8-9ad3-315862045586",
+            "formatString": "0%"
+          },
+          {
+            "name": "PM2.5 Drop (Weather-Adjusted)",
+            "expression": "CALCULATE ( [Weather-Adjusted Change], ml_lockdown_effect[pollutant] = \"PM25\" )",
+            "lineageTag": "2b295d3f-e349-5c95-acea-43da22eee6b6",
+            "formatString": "0%"
+          },
+          {
+            "name": "NO2 Drop (Weather-Adjusted)",
+            "expression": "CALCULATE ( [Weather-Adjusted Change], ml_lockdown_effect[pollutant] = \"NO2\" )",
+            "lineageTag": "b293cb87-6799-519a-9e37-4f2d3b7ecdb2",
+            "formatString": "0%"
+          },
+          {
+            "name": "Weather Share of PM2.5 Drop",
+            "expression": "1 - DIVIDE ( [PM2.5 Drop (Weather-Adjusted)], [PM2.5 Drop (Naive)] )",
+            "lineageTag": "f24e2fa5-b964-5312-8e03-1f6cedea81f6",
+            "formatString": "0%"
+          },
+          {
+            "name": "Model Accuracy",
+            "expression": "AVERAGE ( ml_predictions[model_correct] )",
+            "lineageTag": "b3dd899e-9b68-5302-8f46-c7fdd5749593",
+            "formatString": "0%"
+          },
+          {
+            "name": "Baseline Accuracy",
+            "expression": "AVERAGE ( ml_predictions[baseline_correct] )",
+            "lineageTag": "978c28f6-2789-5e78-8c28-a9f29c633add",
+            "formatString": "0%"
+          },
+          {
+            "name": "Accuracy Gain",
+            "expression": "[Model Accuracy] - [Baseline Accuracy]",
+            "lineageTag": "c93efff8-ce20-56b5-9448-bc19e1d43034",
+            "formatString": "+0.0%;-0.0%"
+          },
+          {
+            "name": "Poor+ Recall (Model)",
+            "expression": [
+              "DIVIDE (",
+              "    CALCULATE ( COUNTROWS ( ml_predictions ), ml_predictions[actual_category_rank] >= 4, ml_predictions[predicted_category_rank] >= 4 ),",
+              "    CALCULATE ( COUNTROWS ( ml_predictions ), ml_predictions[actual_category_rank] >= 4 )",
+              ")"
+            ],
+            "lineageTag": "b405b249-a809-5225-baa6-06a7b7397ae8",
+            "formatString": "0%"
+          },
+          {
+            "name": "Poor+ Recall (Baseline)",
+            "expression": [
+              "DIVIDE (",
+              "    CALCULATE ( COUNTROWS ( ml_predictions ), ml_predictions[actual_category_rank] >= 4, ml_predictions[baseline_category_rank] >= 4 ),",
+              "    CALCULATE ( COUNTROWS ( ml_predictions ), ml_predictions[actual_category_rank] >= 4 )",
+              ")"
+            ],
+            "lineageTag": "869e9a27-0758-5fac-aee6-f32827e37ce3",
+            "formatString": "0%"
+          },
+          {
+            "name": "Accuracy On Change Days",
+            "expression": [
+              "CALCULATE (",
+              "    [Model Accuracy],",
+              "    FILTER ( ml_predictions, ml_predictions[actual_category] <> ml_predictions[baseline_category] )",
+              ")"
+            ],
+            "lineageTag": "e00817a1-ea45-5358-937a-08a368c4dcc0",
+            "formatString": "0%"
+          },
+          {
+            "name": "Actual Category",
+            "expression": "AVERAGE ( ml_predictions[actual_category_rank] )",
+            "lineageTag": "7eff0a7c-38fb-581c-ac29-1f3965f3ff35",
+            "formatString": "0"
+          },
+          {
+            "name": "Predicted Category",
+            "expression": "AVERAGE ( ml_predictions[predicted_category_rank] )",
+            "lineageTag": "ee3803dd-808c-5551-9ac8-84732f65a778",
+            "formatString": "0"
+          },
+          {
+            "name": "Confusion Days",
+            "expression": "SUM ( ml_confusion[days] )",
+            "lineageTag": "edb6f6be-fd95-5ee8-bae4-6e74f9d5bdf4",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Confusion Row %",
+            "expression": [
+              "DIVIDE (",
+              "    [Confusion Days],",
+              "    CALCULATE ( [Confusion Days], REMOVEFILTERS ( ml_confusion[predicted], ml_confusion[predicted_rank] ) )",
+              ")"
+            ],
+            "lineageTag": "dcb83603-0d97-59b7-904b-2df6c1a7c578",
+            "formatString": "0%"
+          },
+          {
+            "name": "Metric Value",
+            "expression": "AVERAGE ( ml_model_metrics[value] )",
+            "lineageTag": "c39320c3-6908-56d8-9242-130506ddf0e5",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Importance",
+            "expression": "SUM ( ml_feature_importance[importance] )",
+            "lineageTag": "5cac5099-0493-5fea-8d52-06f4416982be",
+            "formatString": "0.000"
+          },
+          {
+            "name": "Cleaning Steps",
+            "expression": "COUNTROWS ( cleaning_log )",
+            "lineageTag": "e02282d9-a6d0-5c0c-b7a4-55ff82dcfb29",
+            "formatString": "0"
+          },
+          {
+            "name": "AQI Values Rebuilt",
+            "expression": "CALCULATE ( COUNTROWS ( fact_city_day ), NOT fact_city_day[aqi_source] IN { \"official\", \"missing\" } )",
+            "lineageTag": "5950442b-53f0-594c-92e2-6d343b759182",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Sensor Faults Removed",
+            "expression": "SUM ( fact_city_day[pm_fault_flag] )",
+            "lineageTag": "9897b1c1-be76-5e4b-ac5a-a2d33c162648",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Missing Before %",
+            "expression": "DIVIDE ( AVERAGE ( data_quality[missing_raw_pct] ), 100 )",
+            "lineageTag": "d83190b5-9a90-5b59-88dd-45fd9a537453",
+            "formatString": "0%"
+          },
+          {
+            "name": "Missing After %",
+            "expression": "DIVIDE ( AVERAGE ( data_quality[missing_clean_pct] ), 100 )",
+            "lineageTag": "ade64d34-cc33-50a0-b609-095f1c34c8eb",
+            "formatString": "0%"
+          }
+        ]
+      },
+      {
+        "name": "dim_city",
+        "lineageTag": "04f47d36-a3c5-531e-b7ad-5a7639d7766b",
+        "columns": [
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City",
+            "summarizeBy": "none",
+            "lineageTag": "61e1e499-eca7-579b-9fe4-9e3cd2989ea9",
+            "dataCategory": "City"
+          },
+          {
+            "name": "latitude",
+            "dataType": "double",
+            "sourceColumn": "latitude",
+            "summarizeBy": "none",
+            "lineageTag": "e48c7f5d-f3f6-5c71-ad81-efbdc69622a2",
+            "dataCategory": "Latitude"
+          },
+          {
+            "name": "longitude",
+            "dataType": "double",
+            "sourceColumn": "longitude",
+            "summarizeBy": "none",
+            "lineageTag": "485db7d8-f180-5af9-9856-be487a10a4f5",
+            "dataCategory": "Longitude"
+          },
+          {
+            "name": "elevation_m",
+            "dataType": "double",
+            "sourceColumn": "elevation_m",
+            "summarizeBy": "none",
+            "lineageTag": "26bf2d8d-1993-52e0-ba97-89285cf38f15",
+            "isHidden": true
+          },
+          {
+            "name": "population",
+            "dataType": "double",
+            "sourceColumn": "population",
+            "summarizeBy": "none",
+            "lineageTag": "60ae8a95-436c-53bd-af09-1ce23ee169ca"
+          },
+          {
+            "name": "State",
+            "dataType": "string",
+            "sourceColumn": "State",
+            "summarizeBy": "none",
+            "lineageTag": "d3af0de8-4f73-5939-a7f4-e7a253d499d5",
+            "dataCategory": "StateOrProvince"
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "sourceColumn": "Region",
+            "summarizeBy": "none",
+            "lineageTag": "4b980ae4-1879-5e2f-89f6-0aec1d894365"
+          },
+          {
+            "name": "is_coastal",
+            "dataType": "int64",
+            "sourceColumn": "is_coastal",
+            "summarizeBy": "none",
+            "lineageTag": "617fe364-f55b-5e73-b539-3b1460dd015c"
+          },
+          {
+            "name": "first_date",
+            "dataType": "dateTime",
+            "sourceColumn": "first_date",
+            "summarizeBy": "none",
+            "lineageTag": "23f7332a-2690-5edb-9bc7-3e30dd68043d",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "last_date",
+            "dataType": "dateTime",
+            "sourceColumn": "last_date",
+            "summarizeBy": "none",
+            "lineageTag": "38119cf0-4e96-5468-82b5-70828070f3ec",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "days_with_data",
+            "dataType": "int64",
+            "sourceColumn": "days_with_data",
+            "summarizeBy": "none",
+            "lineageTag": "b6cd9c26-276d-5250-9629-b0462e7d0d1d"
+          },
+          {
+            "name": "aqi_days",
+            "dataType": "int64",
+            "sourceColumn": "aqi_days",
+            "summarizeBy": "none",
+            "lineageTag": "9e5dfb11-588a-5c96-8fe2-611f5aa61720",
+            "isHidden": true
+          },
+          {
+            "name": "pm25_level",
+            "dataType": "double",
+            "sourceColumn": "pm25_level",
+            "summarizeBy": "none",
+            "lineageTag": "7ea662e5-2da9-50be-ae39-608865f468f6",
+            "isHidden": true
+          },
+          {
+            "name": "seasonality",
+            "dataType": "double",
+            "sourceColumn": "seasonality",
+            "summarizeBy": "none",
+            "lineageTag": "95510a76-0ab6-53ac-9e11-dd7b46692cd1",
+            "isHidden": true
+          },
+          {
+            "name": "cluster",
+            "dataType": "string",
+            "sourceColumn": "cluster",
+            "summarizeBy": "none",
+            "lineageTag": "9e5ccdfa-6309-5383-ab6c-a9a49caf7036"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_city",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"dim_city.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"City\", type text}, {\"latitude\", type number}, {\"longitude\", type number}, {\"elevation_m\", type number}, {\"population\", type number}, {\"State\", type text}, {\"Region\", type text}, {\"is_coastal\", Int64.Type}, {\"first_date\", type date}, {\"last_date\", type date}, {\"days_with_data\", Int64.Type}, {\"aqi_days\", Int64.Type}, {\"pm25_level\", type number}, {\"seasonality\", type number}, {\"cluster\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "dim_date",
+        "lineageTag": "83a8b9d0-787b-57df-bc7f-74b5e2dbd103",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "lineageTag": "d25c7a68-a141-5375-92d7-1d8212795ac1",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "isKey": true
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year",
+            "summarizeBy": "none",
+            "lineageTag": "c43cf3af-9d73-5a91-99f6-04fff296a21e"
+          },
+          {
+            "name": "Quarter",
+            "dataType": "int64",
+            "sourceColumn": "Quarter",
+            "summarizeBy": "none",
+            "lineageTag": "4bf584c6-4895-5666-baf2-44954992e4a7"
+          },
+          {
+            "name": "Month",
+            "dataType": "int64",
+            "sourceColumn": "Month",
+            "summarizeBy": "none",
+            "lineageTag": "aed11dd6-bb88-5197-a1ca-3989940885cd"
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "summarizeBy": "none",
+            "lineageTag": "556abdb3-212b-5d65-bb63-1cbdbcddb921",
+            "sortByColumn": "Month"
+          },
+          {
+            "name": "YearMonth",
+            "dataType": "dateTime",
+            "sourceColumn": "YearMonth",
+            "summarizeBy": "none",
+            "lineageTag": "f010191e-43c0-5ca8-abf3-c581064038ae",
+            "formatString": "mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "DayOfWeekNum",
+            "dataType": "int64",
+            "sourceColumn": "DayOfWeekNum",
+            "summarizeBy": "none",
+            "lineageTag": "7fc425e2-ebbb-59a9-a680-2eb501489850",
+            "isHidden": true
+          },
+          {
+            "name": "DayOfWeek",
+            "dataType": "string",
+            "sourceColumn": "DayOfWeek",
+            "summarizeBy": "none",
+            "lineageTag": "718ba2f8-5354-50a3-a004-bf9b3c2050b4",
+            "sortByColumn": "DayOfWeekNum"
+          },
+          {
+            "name": "IsWeekend",
+            "dataType": "int64",
+            "sourceColumn": "IsWeekend",
+            "summarizeBy": "none",
+            "lineageTag": "fc104cff-2d5e-5450-bde4-f4686f46a7e4"
+          },
+          {
+            "name": "Season",
+            "dataType": "string",
+            "sourceColumn": "Season",
+            "summarizeBy": "none",
+            "lineageTag": "985599c9-6847-5ffa-b324-981da190b13e",
+            "sortByColumn": "SeasonOrder"
+          },
+          {
+            "name": "SeasonOrder",
+            "dataType": "int64",
+            "sourceColumn": "SeasonOrder",
+            "summarizeBy": "none",
+            "lineageTag": "1489775e-15d0-539b-a825-d5836a8d40a9",
+            "isHidden": true
+          },
+          {
+            "name": "Phase",
+            "dataType": "string",
+            "sourceColumn": "Phase",
+            "summarizeBy": "none",
+            "lineageTag": "d462956a-8181-518a-9c75-677f4d60e7a0"
+          },
+          {
+            "name": "Period",
+            "dataType": "string",
+            "sourceColumn": "Period",
+            "summarizeBy": "none",
+            "lineageTag": "7109e4ee-ffc4-5bdb-ab7d-9421565a22f0"
+          },
+          {
+            "name": "days_from_diwali",
+            "dataType": "int64",
+            "sourceColumn": "days_from_diwali",
+            "summarizeBy": "none",
+            "lineageTag": "17bbced0-ed67-59b2-b2e6-74d8ecd20b15",
+            "isHidden": true
+          },
+          {
+            "name": "is_diwali_window",
+            "dataType": "int64",
+            "sourceColumn": "is_diwali_window",
+            "summarizeBy": "none",
+            "lineageTag": "1857c5c7-ea38-53bb-be53-5e397cc093f8"
+          },
+          {
+            "name": "is_stubble_season",
+            "dataType": "int64",
+            "sourceColumn": "is_stubble_season",
+            "summarizeBy": "none",
+            "lineageTag": "0aed05e3-2d16-58b6-bc3f-87f7683ba3ff"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_date",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"dim_date.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"Date\", type date}, {\"Year\", Int64.Type}, {\"Quarter\", Int64.Type}, {\"Month\", Int64.Type}, {\"MonthName\", type text}, {\"YearMonth\", type date}, {\"DayOfWeekNum\", Int64.Type}, {\"DayOfWeek\", type text}, {\"IsWeekend\", Int64.Type}, {\"Season\", type text}, {\"SeasonOrder\", Int64.Type}, {\"Phase\", type text}, {\"Period\", type text}, {\"days_from_diwali\", Int64.Type}, {\"is_diwali_window\", Int64.Type}, {\"is_stubble_season\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "dataCategory": "Time"
+      },
+      {
+        "name": "dim_station",
+        "lineageTag": "22da9166-d840-54c5-b3b5-c5373c83d935",
+        "columns": [
+          {
+            "name": "StationId",
+            "dataType": "string",
+            "sourceColumn": "StationId",
+            "summarizeBy": "none",
+            "lineageTag": "b520954b-fba9-5d71-9e6e-951f8bd8a713"
+          },
+          {
+            "name": "StationName",
+            "dataType": "string",
+            "sourceColumn": "StationName",
+            "summarizeBy": "none",
+            "lineageTag": "bbd89956-a296-5904-92aa-620846e0987d"
+          },
+          {
+            "name": "station_place",
+            "dataType": "string",
+            "sourceColumn": "station_place",
+            "summarizeBy": "none",
+            "lineageTag": "114cab45-7d4e-54bd-9bf2-e6934f69e516"
+          },
+          {
+            "name": "agency",
+            "dataType": "string",
+            "sourceColumn": "agency",
+            "summarizeBy": "none",
+            "lineageTag": "c916014f-254b-57aa-bee1-51ba85704063"
+          },
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City",
+            "summarizeBy": "none",
+            "lineageTag": "ca2e3475-8b4a-5257-8ab1-37fb35bacbb7"
+          },
+          {
+            "name": "State",
+            "dataType": "string",
+            "sourceColumn": "State",
+            "summarizeBy": "none",
+            "lineageTag": "03baa22f-7dae-5a9d-b8a8-91aa83ac78c5"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status",
+            "summarizeBy": "none",
+            "lineageTag": "59fd505d-490a-5e43-b0fd-a58ee796ab91"
+          },
+          {
+            "name": "days_reported",
+            "dataType": "double",
+            "sourceColumn": "days_reported",
+            "summarizeBy": "none",
+            "lineageTag": "b20ad191-4bb6-5fc7-ae9f-836094d71aa8"
+          },
+          {
+            "name": "first_date",
+            "dataType": "dateTime",
+            "sourceColumn": "first_date",
+            "summarizeBy": "none",
+            "lineageTag": "13b39493-c9ee-5d5a-9635-dda3d7abbe6d",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "last_date",
+            "dataType": "dateTime",
+            "sourceColumn": "last_date",
+            "summarizeBy": "none",
+            "lineageTag": "5dbd6527-dc38-55a5-8090-53e1a93046b1",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "pm25_mean",
+            "dataType": "double",
+            "sourceColumn": "pm25_mean",
+            "summarizeBy": "none",
+            "lineageTag": "393cdabc-d77f-5589-b7af-e9eb350c33e5"
+          },
+          {
+            "name": "pm25_median",
+            "dataType": "double",
+            "sourceColumn": "pm25_median",
+            "summarizeBy": "none",
+            "lineageTag": "8e1a1e03-5e07-5f96-863b-778f06597af7"
+          },
+          {
+            "name": "share_days_above_naaqs",
+            "dataType": "double",
+            "sourceColumn": "share_days_above_naaqs",
+            "summarizeBy": "none",
+            "lineageTag": "050001b3-1d82-5722-8d7f-9fb37e512f27"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_station",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"dim_station.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"StationId\", type text}, {\"StationName\", type text}, {\"station_place\", type text}, {\"agency\", type text}, {\"City\", type text}, {\"State\", type text}, {\"Status\", type text}, {\"days_reported\", type number}, {\"first_date\", type date}, {\"last_date\", type date}, {\"pm25_mean\", type number}, {\"pm25_median\", type number}, {\"share_days_above_naaqs\", type number}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "dim_aqi_category",
+        "lineageTag": "915f382c-c7e6-5559-a5b6-bd3ad106b703",
+        "columns": [
+          {
+            "name": "category",
+            "dataType": "string",
+            "sourceColumn": "category",
+            "summarizeBy": "none",
+            "lineageTag": "9046b5fa-5a50-52a3-b3fc-37639a3b16d2",
+            "sortByColumn": "rank"
+          },
+          {
+            "name": "rank",
+            "dataType": "int64",
+            "sourceColumn": "rank",
+            "summarizeBy": "none",
+            "lineageTag": "55212e65-001b-5a43-b7a4-b82fd91cbfd3",
+            "isHidden": true
+          },
+          {
+            "name": "aqi_from",
+            "dataType": "int64",
+            "sourceColumn": "aqi_from",
+            "summarizeBy": "none",
+            "lineageTag": "3bff0b91-6f9e-56fb-997e-cf14f2d95dbf"
+          },
+          {
+            "name": "aqi_to",
+            "dataType": "int64",
+            "sourceColumn": "aqi_to",
+            "summarizeBy": "none",
+            "lineageTag": "56b3c012-7b62-52ee-b922-1e2937000bdf"
+          },
+          {
+            "name": "color",
+            "dataType": "string",
+            "sourceColumn": "color",
+            "summarizeBy": "none",
+            "lineageTag": "bfd98c80-751d-5785-b2bb-4773d4711012",
+            "isHidden": true
+          },
+          {
+            "name": "health_message",
+            "dataType": "string",
+            "sourceColumn": "health_message",
+            "summarizeBy": "none",
+            "lineageTag": "bdd85fbc-c45c-5b22-a6d4-3e045fb858ec"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_aqi_category",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"dim_aqi_category.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"category\", type text}, {\"rank\", Int64.Type}, {\"aqi_from\", Int64.Type}, {\"aqi_to\", Int64.Type}, {\"color\", type text}, {\"health_message\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "fact_city_day",
+        "lineageTag": "ea418ea9-5a1c-5a53-828f-9b29ae4922dc",
+        "columns": [
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City",
+            "summarizeBy": "none",
+            "lineageTag": "71b73a10-b945-5530-ab4c-5d66ec6e2239"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "lineageTag": "7941fdfe-a5a2-5181-bae7-0c2fd61880a6",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "PM25",
+            "dataType": "double",
+            "sourceColumn": "PM25",
+            "summarizeBy": "none",
+            "lineageTag": "b8bb3724-5f20-50f1-9ed3-63ace81aee0a"
+          },
+          {
+            "name": "PM10",
+            "dataType": "double",
+            "sourceColumn": "PM10",
+            "summarizeBy": "none",
+            "lineageTag": "6e125b70-d223-51d2-b0ef-c49e5de930b8"
+          },
+          {
+            "name": "NO",
+            "dataType": "double",
+            "sourceColumn": "NO",
+            "summarizeBy": "none",
+            "lineageTag": "8dce7be7-4ccf-5859-8492-fc308727a664",
+            "isHidden": true
+          },
+          {
+            "name": "NO2",
+            "dataType": "double",
+            "sourceColumn": "NO2",
+            "summarizeBy": "none",
+            "lineageTag": "50aff470-fdac-50b3-ae5e-e9591a2e0527"
+          },
+          {
+            "name": "NOx",
+            "dataType": "double",
+            "sourceColumn": "NOx",
+            "summarizeBy": "none",
+            "lineageTag": "d28e0fab-f297-54b3-b896-8916e7b6a189",
+            "isHidden": true
+          },
+          {
+            "name": "NH3",
+            "dataType": "double",
+            "sourceColumn": "NH3",
+            "summarizeBy": "none",
+            "lineageTag": "e2b08b2a-318c-5d77-9976-05bf7cf47643"
+          },
+          {
+            "name": "CO",
+            "dataType": "double",
+            "sourceColumn": "CO",
+            "summarizeBy": "none",
+            "lineageTag": "af56604a-751d-539e-8169-9b53cbcc87cf"
+          },
+          {
+            "name": "SO2",
+            "dataType": "double",
+            "sourceColumn": "SO2",
+            "summarizeBy": "none",
+            "lineageTag": "53f5e104-0af6-5630-8242-6b9b7a0a0f0c"
+          },
+          {
+            "name": "O3",
+            "dataType": "double",
+            "sourceColumn": "O3",
+            "summarizeBy": "none",
+            "lineageTag": "6a6ffc99-4d44-5d9b-b070-9ed086c3c825"
+          },
+          {
+            "name": "Benzene",
+            "dataType": "double",
+            "sourceColumn": "Benzene",
+            "summarizeBy": "none",
+            "lineageTag": "2716e455-d5e2-577d-a2b7-ff0f6d2cc85a",
+            "isHidden": true
+          },
+          {
+            "name": "Toluene",
+            "dataType": "double",
+            "sourceColumn": "Toluene",
+            "summarizeBy": "none",
+            "lineageTag": "f4293f38-528a-52fd-98bb-6891479649c4",
+            "isHidden": true
+          },
+          {
+            "name": "AQI_official",
+            "dataType": "double",
+            "sourceColumn": "AQI_official",
+            "summarizeBy": "none",
+            "lineageTag": "4e07b0d1-607b-5f72-a622-8aff01d5cdc2"
+          },
+          {
+            "name": "AQI_Bucket_official",
+            "dataType": "string",
+            "sourceColumn": "AQI_Bucket_official",
+            "summarizeBy": "none",
+            "lineageTag": "42092d37-bbfb-5b09-bf65-123eb9bf4c44",
+            "isHidden": true
+          },
+          {
+            "name": "co_invalid_flag",
+            "dataType": "int64",
+            "sourceColumn": "co_invalid_flag",
+            "summarizeBy": "none",
+            "lineageTag": "5aea0d9b-0493-55db-b98c-2a09a48e7b19",
+            "isHidden": true
+          },
+          {
+            "name": "pm_fault_flag",
+            "dataType": "int64",
+            "sourceColumn": "pm_fault_flag",
+            "summarizeBy": "none",
+            "lineageTag": "9bbca2f3-4dbd-5a9f-b337-df1eeeb90711"
+          },
+          {
+            "name": "episode_flag",
+            "dataType": "int64",
+            "sourceColumn": "episode_flag",
+            "summarizeBy": "none",
+            "lineageTag": "39e6acc4-29b7-5b57-820f-13551cabbcea"
+          },
+          {
+            "name": "pm25_imputed_flag",
+            "dataType": "int64",
+            "sourceColumn": "pm25_imputed_flag",
+            "summarizeBy": "none",
+            "lineageTag": "d814c765-5bef-5a3e-abcb-5161ff160315",
+            "isHidden": true
+          },
+          {
+            "name": "dominant_pollutant",
+            "dataType": "string",
+            "sourceColumn": "dominant_pollutant",
+            "summarizeBy": "none",
+            "lineageTag": "750c821c-8f1f-5ee4-be1e-7e0d84fdae1a"
+          },
+          {
+            "name": "aqi_source",
+            "dataType": "string",
+            "sourceColumn": "aqi_source",
+            "summarizeBy": "none",
+            "lineageTag": "d0df2a9e-b6c8-58df-b811-d11cd0046b9f"
+          },
+          {
+            "name": "AQI_clean",
+            "dataType": "double",
+            "sourceColumn": "AQI_clean",
+            "summarizeBy": "none",
+            "lineageTag": "efbf8b95-9cab-5d70-bcee-19415d7878ae"
+          },
+          {
+            "name": "AQI_Bucket_clean",
+            "dataType": "string",
+            "sourceColumn": "AQI_Bucket_clean",
+            "summarizeBy": "none",
+            "lineageTag": "4da9ee93-7774-57b3-953f-9e0b0cb012f3"
+          },
+          {
+            "name": "temp_mean",
+            "dataType": "double",
+            "sourceColumn": "temp_mean",
+            "summarizeBy": "none",
+            "lineageTag": "464eebe9-5c8a-599e-9dab-8e1ed01fc950"
+          },
+          {
+            "name": "temp_max",
+            "dataType": "double",
+            "sourceColumn": "temp_max",
+            "summarizeBy": "none",
+            "lineageTag": "00e5a09c-6c9d-5e99-acdb-9eacf5ba5b96",
+            "isHidden": true
+          },
+          {
+            "name": "temp_min",
+            "dataType": "double",
+            "sourceColumn": "temp_min",
+            "summarizeBy": "none",
+            "lineageTag": "340f44ea-2fa2-5e16-8e7a-210146f5ccd8",
+            "isHidden": true
+          },
+          {
+            "name": "precip_mm",
+            "dataType": "double",
+            "sourceColumn": "precip_mm",
+            "summarizeBy": "none",
+            "lineageTag": "aeb274fe-dc3a-58ed-a020-9dcb74ef5340"
+          },
+          {
+            "name": "humidity",
+            "dataType": "int64",
+            "sourceColumn": "humidity",
+            "summarizeBy": "none",
+            "lineageTag": "4ed3a6e5-d02a-5e74-8556-2ab7cc62d73a"
+          },
+          {
+            "name": "wind_max_kmh",
+            "dataType": "double",
+            "sourceColumn": "wind_max_kmh",
+            "summarizeBy": "none",
+            "lineageTag": "f1cbc647-1e55-5fb3-a35e-ceabfd9ced1a"
+          },
+          {
+            "name": "wind_dir_deg",
+            "dataType": "int64",
+            "sourceColumn": "wind_dir_deg",
+            "summarizeBy": "none",
+            "lineageTag": "987f2055-b598-5b81-8132-07dc43193077",
+            "isHidden": true
+          },
+          {
+            "name": "solar_mj",
+            "dataType": "double",
+            "sourceColumn": "solar_mj",
+            "summarizeBy": "none",
+            "lineageTag": "4b9d2d66-1a02-5aab-a363-4b6328464877",
+            "isHidden": true
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "sourceColumn": "Region",
+            "summarizeBy": "none",
+            "lineageTag": "04ffe669-5044-57ba-bbe8-a168a67aa94e"
+          },
+          {
+            "name": "is_coastal",
+            "dataType": "int64",
+            "sourceColumn": "is_coastal",
+            "summarizeBy": "none",
+            "lineageTag": "6488a987-31d6-578a-a4d2-afc4e4a4794b",
+            "isHidden": true
+          },
+          {
+            "name": "latitude",
+            "dataType": "double",
+            "sourceColumn": "latitude",
+            "summarizeBy": "none",
+            "lineageTag": "b292d963-564b-59fc-9a00-9400e354efe3",
+            "isHidden": true
+          },
+          {
+            "name": "longitude",
+            "dataType": "double",
+            "sourceColumn": "longitude",
+            "summarizeBy": "none",
+            "lineageTag": "c1d33374-c024-5afa-a893-89bd69f09636",
+            "isHidden": true
+          },
+          {
+            "name": "elevation_m",
+            "dataType": "double",
+            "sourceColumn": "elevation_m",
+            "summarizeBy": "none",
+            "lineageTag": "145a9782-9723-5f9c-94dd-89ad8d12786e",
+            "isHidden": true
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year",
+            "summarizeBy": "none",
+            "lineageTag": "d51e15e9-1e67-585f-abf1-a24b481a78f0",
+            "isHidden": true
+          },
+          {
+            "name": "Month",
+            "dataType": "int64",
+            "sourceColumn": "Month",
+            "summarizeBy": "none",
+            "lineageTag": "c5030df4-ea00-5251-a5a4-63febbdfa4f7",
+            "isHidden": true
+          },
+          {
+            "name": "DayOfWeekNum",
+            "dataType": "int64",
+            "sourceColumn": "DayOfWeekNum",
+            "summarizeBy": "none",
+            "lineageTag": "cad6ce00-3ea1-5476-8186-a1748407bce3",
+            "isHidden": true
+          },
+          {
+            "name": "IsWeekend",
+            "dataType": "int64",
+            "sourceColumn": "IsWeekend",
+            "summarizeBy": "none",
+            "lineageTag": "c0cc49ee-fc8d-5cc9-8e2d-cf5247cd19bd",
+            "isHidden": true
+          },
+          {
+            "name": "Season",
+            "dataType": "string",
+            "sourceColumn": "Season",
+            "summarizeBy": "none",
+            "lineageTag": "b439771e-0927-58b3-a431-fba67a99f311"
+          },
+          {
+            "name": "Phase",
+            "dataType": "string",
+            "sourceColumn": "Phase",
+            "summarizeBy": "none",
+            "lineageTag": "be650ed6-aba5-59a3-a259-ff95a12ba282",
+            "isHidden": true
+          },
+          {
+            "name": "Period",
+            "dataType": "string",
+            "sourceColumn": "Period",
+            "summarizeBy": "none",
+            "lineageTag": "16715ca9-6c15-517e-8bee-a6c270b8e322",
+            "isHidden": true
+          },
+          {
+            "name": "days_from_diwali",
+            "dataType": "int64",
+            "sourceColumn": "days_from_diwali",
+            "summarizeBy": "none",
+            "lineageTag": "efe9af30-7c38-5db8-8344-b675986b4d6b",
+            "isHidden": true
+          },
+          {
+            "name": "is_diwali_window",
+            "dataType": "int64",
+            "sourceColumn": "is_diwali_window",
+            "summarizeBy": "none",
+            "lineageTag": "b9877a9e-934a-5eda-ac38-01adbf5aa90f",
+            "isHidden": true
+          },
+          {
+            "name": "is_stubble_season",
+            "dataType": "int64",
+            "sourceColumn": "is_stubble_season",
+            "summarizeBy": "none",
+            "lineageTag": "0c32573d-84af-5712-af96-b7cddfba34c6",
+            "isHidden": true
+          },
+          {
+            "name": "temp_range",
+            "dataType": "double",
+            "sourceColumn": "temp_range",
+            "summarizeBy": "none",
+            "lineageTag": "78ee20c6-6d13-59b2-b939-6179352cd381",
+            "isHidden": true
+          },
+          {
+            "name": "is_rainy",
+            "dataType": "int64",
+            "sourceColumn": "is_rainy",
+            "summarizeBy": "none",
+            "lineageTag": "8cf8f590-931a-5558-aff9-80c6073021ea",
+            "isHidden": true
+          },
+          {
+            "name": "wind_u",
+            "dataType": "double",
+            "sourceColumn": "wind_u",
+            "summarizeBy": "none",
+            "lineageTag": "06bef174-6429-5c9f-90c3-c2faca0d67c4",
+            "isHidden": true
+          },
+          {
+            "name": "wind_v",
+            "dataType": "double",
+            "sourceColumn": "wind_v",
+            "summarizeBy": "none",
+            "lineageTag": "1cb5489a-8ce9-5edf-9e5b-dcf573791733",
+            "isHidden": true
+          },
+          {
+            "name": "doy_sin",
+            "dataType": "double",
+            "sourceColumn": "doy_sin",
+            "summarizeBy": "none",
+            "lineageTag": "8f21a92f-f11f-5683-b12d-38c051542cd7",
+            "isHidden": true
+          },
+          {
+            "name": "doy_cos",
+            "dataType": "double",
+            "sourceColumn": "doy_cos",
+            "summarizeBy": "none",
+            "lineageTag": "8511bdf2-f626-590f-b0c7-9c6078f82f0e",
+            "isHidden": true
+          },
+          {
+            "name": "years_since_2015",
+            "dataType": "double",
+            "sourceColumn": "years_since_2015",
+            "summarizeBy": "none",
+            "lineageTag": "3e07891e-d818-59ce-931f-1b60637ac4a5",
+            "isHidden": true
+          },
+          {
+            "name": "pm25_above_naaqs",
+            "dataType": "int64",
+            "sourceColumn": "pm25_above_naaqs",
+            "summarizeBy": "none",
+            "lineageTag": "6a328aa0-dc13-508e-9c3b-bbb176123d33",
+            "isHidden": true
+          },
+          {
+            "name": "pm25_vs_city_month",
+            "dataType": "double",
+            "sourceColumn": "pm25_vs_city_month",
+            "summarizeBy": "none",
+            "lineageTag": "4a35956a-542b-5871-a872-d04329e43df9",
+            "isHidden": true
+          },
+          {
+            "name": "PM25_lag1",
+            "dataType": "double",
+            "sourceColumn": "PM25_lag1",
+            "summarizeBy": "none",
+            "lineageTag": "d5429904-83df-51b5-81cc-2565b4eba9a2",
+            "isHidden": true
+          },
+          {
+            "name": "AQI_clean_lag1",
+            "dataType": "double",
+            "sourceColumn": "AQI_clean_lag1",
+            "summarizeBy": "none",
+            "lineageTag": "b1e67249-fcbf-5932-a04b-cc46bcefadc0",
+            "isHidden": true
+          },
+          {
+            "name": "precip_mm_lag1",
+            "dataType": "double",
+            "sourceColumn": "precip_mm_lag1",
+            "summarizeBy": "none",
+            "lineageTag": "433c65db-1c24-56cf-8455-7256590f6bc1",
+            "isHidden": true
+          },
+          {
+            "name": "PM25_lag2",
+            "dataType": "double",
+            "sourceColumn": "PM25_lag2",
+            "summarizeBy": "none",
+            "lineageTag": "f565f9a2-f502-54a4-b417-a74625e51442",
+            "isHidden": true
+          },
+          {
+            "name": "pm25_roll7",
+            "dataType": "double",
+            "sourceColumn": "pm25_roll7",
+            "summarizeBy": "none",
+            "lineageTag": "5c740e32-ba93-5afa-b08f-33b846a43cb9",
+            "isHidden": true
+          },
+          {
+            "name": "city_group",
+            "dataType": "string",
+            "sourceColumn": "city_group",
+            "summarizeBy": "none",
+            "lineageTag": "7ca42730-6e96-5f5f-84ec-eee1e1b44cc3"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_city_day",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"fact_city_day.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"City\", type text}, {\"Date\", type date}, {\"PM25\", type number}, {\"PM10\", type number}, {\"NO\", type number}, {\"NO2\", type number}, {\"NOx\", type number}, {\"NH3\", type number}, {\"CO\", type number}, {\"SO2\", type number}, {\"O3\", type number}, {\"Benzene\", type number}, {\"Toluene\", type number}, {\"AQI_official\", type number}, {\"AQI_Bucket_official\", type text}, {\"co_invalid_flag\", Int64.Type}, {\"pm_fault_flag\", Int64.Type}, {\"episode_flag\", Int64.Type}, {\"pm25_imputed_flag\", Int64.Type}, {\"dominant_pollutant\", type text}, {\"aqi_source\", type text}, {\"AQI_clean\", type number}, {\"AQI_Bucket_clean\", type text}, {\"temp_mean\", type number}, {\"temp_max\", type number}, {\"temp_min\", type number}, {\"precip_mm\", type number}, {\"humidity\", Int64.Type}, {\"wind_max_kmh\", type number}, {\"wind_dir_deg\", Int64.Type}, {\"solar_mj\", type number}, {\"Region\", type text}, {\"is_coastal\", Int64.Type}, {\"latitude\", type number}, {\"longitude\", type number}, {\"elevation_m\", type number}, {\"Year\", Int64.Type}, {\"Month\", Int64.Type}, {\"DayOfWeekNum\", Int64.Type}, {\"IsWeekend\", Int64.Type}, {\"Season\", type text}, {\"Phase\", type text}, {\"Period\", type text}, {\"days_from_diwali\", Int64.Type}, {\"is_diwali_window\", Int64.Type}, {\"is_stubble_season\", Int64.Type}, {\"temp_range\", type number}, {\"is_rainy\", Int64.Type}, {\"wind_u\", type number}, {\"wind_v\", type number}, {\"doy_sin\", type number}, {\"doy_cos\", type number}, {\"years_since_2015\", type number}, {\"pm25_above_naaqs\", Int64.Type}, {\"pm25_vs_city_month\", type number}, {\"PM25_lag1\", type number}, {\"AQI_clean_lag1\", type number}, {\"precip_mm_lag1\", type number}, {\"PM25_lag2\", type number}, {\"pm25_roll7\", type number}, {\"city_group\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "ml_predictions",
+        "lineageTag": "d1b95c6c-0fcb-5097-ab27-41b5e3671581",
+        "columns": [
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City",
+            "summarizeBy": "none",
+            "lineageTag": "532614d5-4988-531d-b2f9-9b82c4812331"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "lineageTag": "06354ee1-4224-5abd-be35-0ec9619ca020",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "split",
+            "dataType": "string",
+            "sourceColumn": "split",
+            "summarizeBy": "none",
+            "lineageTag": "53023614-ee82-54db-8fbd-e5996602db6f"
+          },
+          {
+            "name": "actual_category",
+            "dataType": "string",
+            "sourceColumn": "actual_category",
+            "summarizeBy": "none",
+            "lineageTag": "31123e45-2297-5f42-b2db-f0e26b6f058b"
+          },
+          {
+            "name": "predicted_category",
+            "dataType": "string",
+            "sourceColumn": "predicted_category",
+            "summarizeBy": "none",
+            "lineageTag": "d33a04f9-f433-5fd3-a67a-bda84f4573ef"
+          },
+          {
+            "name": "baseline_category",
+            "dataType": "string",
+            "sourceColumn": "baseline_category",
+            "summarizeBy": "none",
+            "lineageTag": "0c8d8327-e95d-512a-bcd2-443d138007e1"
+          },
+          {
+            "name": "prob_poor_or_worse",
+            "dataType": "double",
+            "sourceColumn": "prob_poor_or_worse",
+            "summarizeBy": "none",
+            "lineageTag": "3657c8ac-6366-5e88-9dfa-5f574174a326"
+          },
+          {
+            "name": "actual_category_rank",
+            "dataType": "int64",
+            "sourceColumn": "actual_category_rank",
+            "summarizeBy": "none",
+            "lineageTag": "3ec37eca-7cff-52a8-a7d4-ee7faef1939f",
+            "isHidden": true
+          },
+          {
+            "name": "predicted_category_rank",
+            "dataType": "int64",
+            "sourceColumn": "predicted_category_rank",
+            "summarizeBy": "none",
+            "lineageTag": "ecf70883-a85c-5e16-9aaf-d9e9d806be00",
+            "isHidden": true
+          },
+          {
+            "name": "baseline_category_rank",
+            "dataType": "int64",
+            "sourceColumn": "baseline_category_rank",
+            "summarizeBy": "none",
+            "lineageTag": "fbe7e5e3-3d76-5f5d-9e6c-21e1d7894940",
+            "isHidden": true
+          },
+          {
+            "name": "model_correct",
+            "dataType": "int64",
+            "sourceColumn": "model_correct",
+            "summarizeBy": "none",
+            "lineageTag": "93e25d61-1b9e-5c4a-9612-dc4c4641da2d"
+          },
+          {
+            "name": "baseline_correct",
+            "dataType": "int64",
+            "sourceColumn": "baseline_correct",
+            "summarizeBy": "none",
+            "lineageTag": "538c339c-dd0d-5b14-a1eb-d108c66eb6a4"
+          },
+          {
+            "name": "error_steps",
+            "dataType": "int64",
+            "sourceColumn": "error_steps",
+            "summarizeBy": "none",
+            "lineageTag": "d5556918-d403-5c71-94bc-1711e9dc307b"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ml_predictions",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"ml_predictions.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"City\", type text}, {\"Date\", type date}, {\"split\", type text}, {\"actual_category\", type text}, {\"predicted_category\", type text}, {\"baseline_category\", type text}, {\"prob_poor_or_worse\", type number}, {\"actual_category_rank\", Int64.Type}, {\"predicted_category_rank\", Int64.Type}, {\"baseline_category_rank\", Int64.Type}, {\"model_correct\", Int64.Type}, {\"baseline_correct\", Int64.Type}, {\"error_steps\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "ml_confusion",
+        "lineageTag": "b3dbe38b-5f9d-5e45-a8c4-b3d79e3a9eb0",
+        "columns": [
+          {
+            "name": "actual",
+            "dataType": "string",
+            "sourceColumn": "actual",
+            "summarizeBy": "none",
+            "lineageTag": "a7d70ee3-b0d4-585f-8a3d-b8937bde690b",
+            "sortByColumn": "actual_rank"
+          },
+          {
+            "name": "predicted",
+            "dataType": "string",
+            "sourceColumn": "predicted",
+            "summarizeBy": "none",
+            "lineageTag": "c3aa013a-262d-56b5-b9af-e4fd3c2b41c4",
+            "sortByColumn": "predicted_rank"
+          },
+          {
+            "name": "days",
+            "dataType": "int64",
+            "sourceColumn": "days",
+            "summarizeBy": "none",
+            "lineageTag": "7efeb130-9167-5898-9465-aee71d29ed88"
+          },
+          {
+            "name": "actual_rank",
+            "dataType": "int64",
+            "sourceColumn": "actual_rank",
+            "summarizeBy": "none",
+            "lineageTag": "47eecd9f-1946-5791-8fb9-08d281bef93f",
+            "isHidden": true
+          },
+          {
+            "name": "predicted_rank",
+            "dataType": "int64",
+            "sourceColumn": "predicted_rank",
+            "summarizeBy": "none",
+            "lineageTag": "91a7dd1e-0d6b-5b1f-9ed6-53d3fb10ba5d",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ml_confusion",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"ml_confusion.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"actual\", type text}, {\"predicted\", type text}, {\"days\", Int64.Type}, {\"actual_rank\", Int64.Type}, {\"predicted_rank\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "ml_model_metrics",
+        "lineageTag": "d09d2edc-383f-596b-a9a5-49651623fa95",
+        "columns": [
+          {
+            "name": "evaluation",
+            "dataType": "string",
+            "sourceColumn": "evaluation",
+            "summarizeBy": "none",
+            "lineageTag": "fbae7f67-b83d-51b6-b3e1-6badeabed715"
+          },
+          {
+            "name": "model",
+            "dataType": "string",
+            "sourceColumn": "model",
+            "summarizeBy": "none",
+            "lineageTag": "912e2779-85e1-54ba-a99d-5a6f6fe65cd1"
+          },
+          {
+            "name": "metric",
+            "dataType": "string",
+            "sourceColumn": "metric",
+            "summarizeBy": "none",
+            "lineageTag": "f635a7ab-52bd-56f7-815b-525ed3fd4fbd"
+          },
+          {
+            "name": "value",
+            "dataType": "double",
+            "sourceColumn": "value",
+            "summarizeBy": "none",
+            "lineageTag": "4b488676-dbc9-5f7b-9dbc-d320f619dc56"
+          },
+          {
+            "name": "task",
+            "dataType": "string",
+            "sourceColumn": "task",
+            "summarizeBy": "none",
+            "lineageTag": "e8f623fc-8b7b-5cab-b8ba-31cb8d98c332"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ml_model_metrics",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"ml_model_metrics.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"evaluation\", type text}, {\"model\", type text}, {\"metric\", type text}, {\"value\", type number}, {\"task\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "ml_feature_importance",
+        "lineageTag": "784de423-cafc-5029-9a2b-4ed94c4fff2f",
+        "columns": [
+          {
+            "name": "feature",
+            "dataType": "string",
+            "sourceColumn": "feature",
+            "summarizeBy": "none",
+            "lineageTag": "db85998d-ed58-5096-82e6-0036decf9961"
+          },
+          {
+            "name": "importance",
+            "dataType": "double",
+            "sourceColumn": "importance",
+            "summarizeBy": "none",
+            "lineageTag": "ec9ec960-c499-5578-ba50-12e675913290"
+          },
+          {
+            "name": "std",
+            "dataType": "double",
+            "sourceColumn": "std",
+            "summarizeBy": "none",
+            "lineageTag": "2e9424b9-960d-55e2-9ec2-d954db8fbbb3"
+          },
+          {
+            "name": "label",
+            "dataType": "string",
+            "sourceColumn": "label",
+            "summarizeBy": "none",
+            "lineageTag": "910d29af-9849-5630-bb87-afee29785789"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ml_feature_importance",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"ml_feature_importance.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"feature\", type text}, {\"importance\", type number}, {\"std\", type number}, {\"label\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "ml_counterfactual",
+        "lineageTag": "5fa3b06a-651b-55ec-aa31-4271edb1ebb3",
+        "columns": [
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City",
+            "summarizeBy": "none",
+            "lineageTag": "9f0df212-c6bd-5566-9567-71c6ff18372c"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "lineageTag": "0085ffaa-5c52-546d-9dc5-08835f9265ab",
+            "formatString": "dd mmm yyyy",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "Phase",
+            "dataType": "string",
+            "sourceColumn": "Phase",
+            "summarizeBy": "none",
+            "lineageTag": "2efd9de4-ae0a-5591-a5d5-e95cea2dab62"
+          },
+          {
+            "name": "Period",
+            "dataType": "string",
+            "sourceColumn": "Period",
+            "summarizeBy": "none",
+            "lineageTag": "e1793d04-c71d-5219-b440-81494b5ec328"
+          },
+          {
+            "name": "actual",
+            "dataType": "double",
+            "sourceColumn": "actual",
+            "summarizeBy": "none",
+            "lineageTag": "efe9e352-5c32-58a2-9dd0-87420099eda0"
+          },
+          {
+            "name": "pollutant",
+            "dataType": "string",
+            "sourceColumn": "pollutant",
+            "summarizeBy": "none",
+            "lineageTag": "16e207fa-831e-553f-aa1c-9b2ade8c985b"
+          },
+          {
+            "name": "predicted_bau",
+            "dataType": "double",
+            "sourceColumn": "predicted_bau",
+            "summarizeBy": "none",
+            "lineageTag": "28f1cbfc-0a44-5366-b27d-49162ab1d8e6"
+          },
+          {
+            "name": "band_low",
+            "dataType": "double",
+            "sourceColumn": "band_low",
+            "summarizeBy": "none",
+            "lineageTag": "134ca153-b641-5f95-87dc-07b1fa195c17"
+          },
+          {
+            "name": "band_high",
+            "dataType": "double",
+            "sourceColumn": "band_high",
+            "summarizeBy": "none",
+            "lineageTag": "bcc6b45d-0b57-5585-8d13-ab79866ccdc0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ml_counterfactual",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"ml_counterfactual.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"City\", type text}, {\"Date\", type date}, {\"Phase\", type text}, {\"Period\", type text}, {\"actual\", type number}, {\"pollutant\", type text}, {\"predicted_bau\", type number}, {\"band_low\", type number}, {\"band_high\", type number}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "ml_lockdown_effect",
+        "lineageTag": "1fbb29db-be8b-50cf-b996-b66b5c27749e",
+        "columns": [
+          {
+            "name": "City",
+            "dataType": "string",
+            "sourceColumn": "City",
+            "summarizeBy": "none",
+            "lineageTag": "b0f64164-6efc-5ec7-bb3f-0c343921f434"
+          },
+          {
+            "name": "actual",
+            "dataType": "double",
+            "sourceColumn": "actual",
+            "summarizeBy": "none",
+            "lineageTag": "615a6214-f979-5dbe-8b6b-fed5014f5b46"
+          },
+          {
+            "name": "predicted",
+            "dataType": "double",
+            "sourceColumn": "predicted",
+            "summarizeBy": "none",
+            "lineageTag": "7ee47131-64c2-5c4d-a160-42600a677a2f"
+          },
+          {
+            "name": "days",
+            "dataType": "int64",
+            "sourceColumn": "days",
+            "summarizeBy": "none",
+            "lineageTag": "f4840669-5433-55b5-a24e-7f5f1429d14a"
+          },
+          {
+            "name": "weather_adjusted_change_pct",
+            "dataType": "double",
+            "sourceColumn": "weather_adjusted_change_pct",
+            "summarizeBy": "none",
+            "lineageTag": "eab6f809-e6de-5c2d-b1c2-2b57ae699879"
+          },
+          {
+            "name": "naive_change_pct",
+            "dataType": "double",
+            "sourceColumn": "naive_change_pct",
+            "summarizeBy": "none",
+            "lineageTag": "811ce2d6-afde-5ace-9626-3f52e5902a43"
+          },
+          {
+            "name": "pollutant",
+            "dataType": "string",
+            "sourceColumn": "pollutant",
+            "summarizeBy": "none",
+            "lineageTag": "eb962086-f2b2-5392-b463-aebceacb04f5"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ml_lockdown_effect",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"ml_lockdown_effect.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"City\", type text}, {\"actual\", type number}, {\"predicted\", type number}, {\"days\", Int64.Type}, {\"weather_adjusted_change_pct\", type number}, {\"naive_change_pct\", type number}, {\"pollutant\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "cleaning_log",
+        "lineageTag": "9f1c5239-ca0a-5874-b383-28257ba684cb",
+        "columns": [
+          {
+            "name": "step",
+            "dataType": "int64",
+            "sourceColumn": "step",
+            "summarizeBy": "none",
+            "lineageTag": "c7610b3d-675a-5679-a6a1-514307174d36"
+          },
+          {
+            "name": "table",
+            "dataType": "string",
+            "sourceColumn": "table",
+            "summarizeBy": "none",
+            "lineageTag": "f17a24e3-9aa4-55e5-9d54-fcedb7d248d1"
+          },
+          {
+            "name": "issue",
+            "dataType": "string",
+            "sourceColumn": "issue",
+            "summarizeBy": "none",
+            "lineageTag": "653f3143-1234-57a0-943d-c645a16f9fd4"
+          },
+          {
+            "name": "action",
+            "dataType": "string",
+            "sourceColumn": "action",
+            "summarizeBy": "none",
+            "lineageTag": "b8e4ceb2-a083-5644-b153-8f44c3d32d66"
+          },
+          {
+            "name": "reason",
+            "dataType": "string",
+            "sourceColumn": "reason",
+            "summarizeBy": "none",
+            "lineageTag": "32591853-234c-5f0f-b8b3-c0d176a88563"
+          },
+          {
+            "name": "rows_affected",
+            "dataType": "int64",
+            "sourceColumn": "rows_affected",
+            "summarizeBy": "none",
+            "lineageTag": "397db519-6b05-5705-9925-8bf7e03de3e1"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "cleaning_log",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"cleaning_log.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"step\", Int64.Type}, {\"table\", type text}, {\"issue\", type text}, {\"action\", type text}, {\"reason\", type text}, {\"rows_affected\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      },
+      {
+        "name": "data_quality",
+        "lineageTag": "6f8ac439-172b-5c82-ada4-6c66a69f5309",
+        "columns": [
+          {
+            "name": "pollutant",
+            "dataType": "string",
+            "sourceColumn": "pollutant",
+            "summarizeBy": "none",
+            "lineageTag": "b51f6d7e-a0fc-57c1-9adb-1ee02da5f8c6"
+          },
+          {
+            "name": "missing_raw_pct",
+            "dataType": "double",
+            "sourceColumn": "missing_raw_pct",
+            "summarizeBy": "none",
+            "lineageTag": "bbf3d04d-7dda-5459-a6d8-19e287d05e96"
+          },
+          {
+            "name": "missing_clean_pct",
+            "dataType": "double",
+            "sourceColumn": "missing_clean_pct",
+            "summarizeBy": "none",
+            "lineageTag": "afd6d7a6-ca17-5a12-b079-a7beaf8de507"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "data_quality",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"data_quality.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Nulls = Table.ReplaceValue(Promoted, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),",
+                "    Typed = Table.TransformColumnTypes(Nulls, {{\"pollutant\", type text}, {\"missing_raw_pct\", type number}, {\"missing_clean_pct\", type number}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "7ed4d2cc-34c0-5c04-99f8-74305a97ad23",
+        "fromTable": "fact_city_day",
+        "fromColumn": "City",
+        "toTable": "dim_city",
+        "toColumn": "City"
+      },
+      {
+        "name": "d31882b3-ee18-55d1-a5af-5312c925f732",
+        "fromTable": "fact_city_day",
+        "fromColumn": "Date",
+        "toTable": "dim_date",
+        "toColumn": "Date"
+      },
+      {
+        "name": "41cb57d1-c928-5baf-8458-77aac7fd10c6",
+        "fromTable": "fact_city_day",
+        "fromColumn": "AQI_Bucket_clean",
+        "toTable": "dim_aqi_category",
+        "toColumn": "category"
+      },
+      {
+        "name": "bb143662-6267-5244-adf2-7d90d4d6631f",
+        "fromTable": "dim_station",
+        "fromColumn": "City",
+        "toTable": "dim_city",
+        "toColumn": "City"
+      },
+      {
+        "name": "38e58388-e2c5-56fe-a24e-313c31e3512c",
+        "fromTable": "ml_predictions",
+        "fromColumn": "City",
+        "toTable": "dim_city",
+        "toColumn": "City"
+      },
+      {
+        "name": "cc122d87-80b0-5a9b-803e-fd72035f2375",
+        "fromTable": "ml_predictions",
+        "fromColumn": "Date",
+        "toTable": "dim_date",
+        "toColumn": "Date"
+      },
+      {
+        "name": "6d13f23e-9e45-5505-9123-bb2f7c2a74f1",
+        "fromTable": "ml_counterfactual",
+        "fromColumn": "City",
+        "toTable": "dim_city",
+        "toColumn": "City"
+      },
+      {
+        "name": "9ed10ff2-f803-5dbe-a217-26ddb572fe51",
+        "fromTable": "ml_counterfactual",
+        "fromColumn": "Date",
+        "toTable": "dim_date",
+        "toColumn": "Date"
+      },
+      {
+        "name": "2205521b-f95e-5c94-8a12-c183fd0dd119",
+        "fromTable": "ml_lockdown_effect",
+        "fromColumn": "City",
+        "toTable": "dim_city",
+        "toColumn": "City"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DataFolder",
+        "kind": "m",
+        "lineageTag": "3e761c30-036d-51c0-902e-15a43e4c73c2",
+        "expression": "\"D:\\breathe-india\\powerbi\\data\\\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"DataFolder\", \"dim_city\", \"dim_date\", \"dim_station\", \"dim_aqi_category\", \"fact_city_day\", \"ml_predictions\", \"ml_confusion\", \"ml_model_metrics\", \"ml_feature_importance\", \"ml_counterfactual\", \"ml_lockdown_effect\", \"cleaning_log\", \"data_quality\"]"
+      }
+    ]
+  }
+}

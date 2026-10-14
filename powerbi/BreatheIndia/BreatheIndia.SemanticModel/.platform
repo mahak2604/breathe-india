@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Breathe India"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ea5970e7-dd04-5eeb-8494-1c77a0bdd815"
+  }
+}
