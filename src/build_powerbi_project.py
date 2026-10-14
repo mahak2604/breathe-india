@@ -417,11 +417,12 @@ def slicer(name, pos, table, column, header, single=False, default=None):
 
 
 def navigator(name):
-    return visual(name, (690, 22, 566, 34), "pageNavigator",
+    # Wide enough that the bold label of the current page ("City explorer") is not cut off.
+    return visual(name, (600, 22, 656, 34), "pageNavigator",
                   objects={
                       "text": [{"properties": {"fontColor": fill("#FFFFFF"), "fontSize": n(10)},
                                 "selector": {"id": "default"}},
-                               {"properties": {"fontColor": fill("#FFFFFF"), "bold": b(True)},
+                               {"properties": {"fontColor": fill("#FFFFFF"), "fontSize": n(10), "bold": b(True)},
                                 "selector": {"id": "selected"}}],
                       "fill": [{"properties": {"show": b(True), "fillColor": fill("#FFFFFF"), "transparency": n(90)},
                                 "selector": {"id": "default"}},

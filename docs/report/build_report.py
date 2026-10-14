@@ -4,8 +4,7 @@ Builds the submission copy of the written report (Word) from docs/report/report.
     python docs/report/build_report.py            -> docs/report/Breathe_India_report.docx
 
 The editable, shareable version of the same text lives in Claude Docs; this script lays it out
-compactly (A4, 10 pt) so it fits the 5-7 page limit. Convert to PDF with Word (File > Save as PDF)
-or let tools/docx_to_pdf.ps1 do it.
+compactly (A4, 10 pt) so it fits the 5-7 page limit. Convert to PDF with Word (File > Save as PDF).
 """
 
 import re

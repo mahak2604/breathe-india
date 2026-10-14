@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "dq_nav",
   "position": {
-    "x": 690,
+    "x": 600,
     "y": 22,
     "z": 5000,
     "height": 34,
-    "width": 566,
+    "width": 656,
     "tabOrder": 5000
   },
   "visual": {
@@ -48,6 +48,13 @@
                       "Value": "'#FFFFFF'"
                     }
                   }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
                 }
               }
             },
