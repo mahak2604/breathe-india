@@ -200,6 +200,9 @@ Point the map and the bar chart on page 1 at it.
 * Click through every slicer. Nothing should go blank.
 * View → **Performance analyzer** → refresh visuals: everything under 1 s.
 * File → **Export → PDF** (the fallback the guidelines ask for) and save as `Breathe_India_dashboard.pdf`.
+  Collapse the Filters, Visualizations and Data panes first. Power BI Desktop sizes the visuals to the
+  visible canvas when it prints, so on a small or high-DPI screen with the panes open they come out at
+  about half size in the top-left corner of each PDF page.
 * Save as `Breathe_India.pbix` in this folder.
 
 ## 7. Two-minute demo script
