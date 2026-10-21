@@ -96,6 +96,6 @@ powerbi/               Breathe_India.pbix + PDF, PBIP project, data CSVs/workboo
 - [x] Cleaning and transformation log (`docs/cleaning_log.md`, also in the notebook and database)
 - [x] Raw and cleaned datasets + regeneration scripts
 - [x] Power BI `.pbix` + PDF export (`powerbi/`)
-- [x] Written report, 6 pages (`docs/report/Breathe_India_report.docx` + `.pdf`)
+- [x] Written report, main text 7 pages plus front matter and appendices (`docs/report/Breathe_India_report.docx` + `.pdf`; rebuild with `build_report.py` then `export_report.ps1`)
 - [x] Presentation deck, 10 slides with speaker notes (`docs/presentation/Breathe_India_viva.pptx` + `.pdf`)
-- [x] Individual contribution statement (report §8 and `docs/contribution_statement.txt`)
+- [x] Individual contribution statement (report front matter, Table 2, and `docs/contribution_statement.txt`)
