@@ -1,55 +1,50 @@
-"""
-Data Extraction - Source 1 (Kaggle download over HTTP)
-Project: Breathe India - what really drives air pollution in Indian cities?
+# Breathe India - data extraction, source 1
+#
+# Downloads the CPCB air quality data from Kaggle and keeps the three daily files we need.
+#
+# Dataset: "Air Quality Data in India (2015 - 2020)" by Vijay Rao on Kaggle
+#   https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india
+# The data itself comes from the Central Pollution Control Board (CPCB), Government of India.
+#
+# Notes:
+# - The download button on the Kaggle website needs a login, but the link below
+#   (the one Kaggle shows under "Download via cURL") works without one.
+# - The zip file is about 76 MB. It also has two hourly files (285 MB in total)
+#   which we don't need, so we only extract the daily files.
 
-Dataset : Air Quality Data in India (2015 - 2020), Vijay "Vopani" Rao, Kaggle
-Page    : https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india
-Origin  : Central Pollution Control Board (CPCB), Government of India
-          (continuous ambient air quality monitoring stations), https://cpcb.nic.in
-
-Access notes (document these in the report, section 4.1):
-    - The browser download button needs a Kaggle login, but the public dataset
-      endpoint below works without credentials (it is the "Download via cURL"
-      link Kaggle shows on the dataset page).
-    - The archive is ~76 MB. The two hourly files inside it (city_hour 66 MB,
-      station_hour 220 MB) are not needed for a daily analysis, so only the three
-      daily files are extracted. They are small enough to commit to GitHub.
-    - Check the licence shown on the Kaggle page before redistributing the files.
-"""
-
-import tempfile
+import os
 import zipfile
-from pathlib import Path
 
 import requests
 
 URL = "https://www.kaggle.com/api/v1/datasets/download/rohanrao/air-quality-data-in-india"
-RAW_DIR = Path("data/raw")
-NEEDED = ["city_day.csv", "station_day.csv", "stations.csv"]
+RAW_FOLDER = "data/raw"
+ZIP_PATH = "data/raw/air_quality_india.zip"
+FILES_WE_NEED = ["city_day.csv", "station_day.csv", "stations.csv"]
 
 
 def main():
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-    if all((RAW_DIR / f).exists() for f in NEEDED):
-        print("CPCB files already present - skipping download")
+    os.makedirs(RAW_FOLDER, exist_ok=True)
+
+    # if all three files are already there, there is nothing to do
+    missing = [name for name in FILES_WE_NEED if not os.path.exists(os.path.join(RAW_FOLDER, name))]
+    if not missing:
+        print("CPCB files already downloaded")
         return
 
-    with tempfile.TemporaryDirectory() as tmp:
-        archive = Path(tmp) / "air-quality-data-in-india.zip"
-        print(f"Downloading {URL}")
-        with requests.get(URL, stream=True, timeout=300) as resp:
-            resp.raise_for_status()
-            with open(archive, "wb") as f:
-                for chunk in resp.iter_content(1 << 20):
-                    f.write(chunk)
-        print(f"  {archive.stat().st_size / 1e6:.1f} MB downloaded")
+    print("Downloading", URL)
+    response = requests.get(URL, timeout=300)
+    response.raise_for_status()
+    with open(ZIP_PATH, "wb") as f:
+        f.write(response.content)
+    print("Downloaded", round(len(response.content) / 1_000_000, 1), "MB")
 
-        with zipfile.ZipFile(archive) as z:
-            for info in z.infolist():
-                print(f"  in archive: {info.filename:18s} {info.file_size / 1e6:6.1f} MB")
-            for name in NEEDED:
-                z.extract(name, RAW_DIR)
-    print(f"Extracted {', '.join(NEEDED)} -> {RAW_DIR}")
+    # take only the daily files out of the zip, then delete the zip
+    with zipfile.ZipFile(ZIP_PATH) as z:
+        for name in FILES_WE_NEED:
+            z.extract(name, RAW_FOLDER)
+    os.remove(ZIP_PATH)
+    print("Saved", ", ".join(FILES_WE_NEED), "in", RAW_FOLDER)
 
 
 if __name__ == "__main__":
